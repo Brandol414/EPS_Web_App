@@ -1,0 +1,231 @@
+﻿@page
+@model EPS_Web_App.Pages.Administration.Users.CreateModel
+
+@{
+    ViewData["Title"] = "Add Administrator";
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="record-view-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                SYSTEM ADMINISTRATION
+            </div>
+
+            <h1 class="record-view-title">
+                Add Administrator
+            </h1>
+
+            <div class="record-view-meta">
+                Create an account authorized for administrative
+                functions.
+            </div>
+
+        </div>
+
+
+        <div class="record-view-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Administrator Accounts
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         VALIDATION
+    ======================================================= -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="validation-summary">
+    </div>
+
+
+    <!-- ======================================================
+         FORM
+    ======================================================= -->
+
+    <form method="post">
+
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        USER ACCOUNT
+                    </div>
+
+                    <h2>
+                        Account Details
+                    </h2>
+
+                    <p>
+                        Create an account for an authorized
+                        system administrator.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-2">
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.DisplayName">
+                        Display Name
+                    </label>
+
+                    <input asp-for="Input.DisplayName"
+                           class="form-control"
+                           autocomplete="name" />
+
+                    <span asp-validation-for="Input.DisplayName"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Username">
+                        Username
+                    </label>
+
+                    <input asp-for="Input.Username"
+                           class="form-control"
+                           autocomplete="username" />
+
+                    <span asp-validation-for="Input.Username"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Password">
+                        Password
+                    </label>
+
+                    <input asp-for="Input.Password"
+                           type="password"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="Input.Password"
+                          class="field-error">
+                    </span>
+
+                    <div class="field-help">
+                        Use at least 8 characters with uppercase,
+                        lowercase, number, and special character.
+                    </div>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ConfirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input asp-for="Input.ConfirmPassword"
+                           type="password"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="Input.ConfirmPassword"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label>
+                        Access Level
+                    </label>
+
+                    <div class="lookup-status-toggle">
+
+                        <input asp-for="Input.IsAdministrator"
+                               type="checkbox"
+                               id="isAdministrator" />
+
+                        <label for="isAdministrator">
+
+                            Administrator
+
+                        </label>
+
+                    </div>
+
+                    <div class="field-help">
+                        Administrator accounts can later be
+                        authorized to edit records and manage
+                        system configuration.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACTIONS
+        =================================================== -->
+
+        <div class="create-form-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="btn eps-btn-primary">
+
+                Create Administrator
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

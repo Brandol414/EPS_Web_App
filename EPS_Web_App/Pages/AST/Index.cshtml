@@ -1,0 +1,845 @@
+﻿@page
+@model EPS_Web_App.Pages.AST.IndexModel
+
+@{
+    ViewData["Title"] = "AST Laboratory";
+
+    var unlinkedAstIconUrl =
+        Url.Content("~/images/unlinked-ast.png");
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                AST LABORATORY MODULE
+            </div>
+
+
+            <h1 class="module-title">
+                Antimicrobial Susceptibility Records
+            </h1>
+
+
+            <p class="module-description">
+                Search, review, and manage antimicrobial susceptibility
+                testing records linked to EPS specimens.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+            <form method="get"
+                  action="/AST/Create"
+                  style="margin:0;">
+
+                <button type="submit"
+                        class="btn eps-btn-primary">
+
+                    <i class="bi bi-plus-circle"
+                       aria-hidden="true"></i>
+
+                    <span>
+                        New AST Record
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="module-record-count">
+
+                <span>
+                    AST Records
+                </span>
+
+
+                <strong>
+                    @Model.TotalRecords.ToString("N0")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SUMMARY
+    ======================================================= -->
+
+    <div class="dashboard-metrics"
+         style="margin-bottom:24px;">
+
+
+        <!-- TOTAL -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    AST RECORDS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.TotalRecords.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Records matching the current filters
+            </div>
+
+        </div>
+
+
+        <!-- LINKED -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-positive">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    LINKED
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-link-45deg"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.LinkedCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                AST records linked to questionnaire specimens
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             UNLINKED
+        =================================================== -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-warning">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    UNLINKED
+                </div>
+
+
+                <div class="
+                    dashboard-metric-icon
+                    eps-unlinked-image-icon"
+                     aria-hidden="true">
+
+                    <img src="@unlinkedAstIconUrl"
+                         alt="" />
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.UnlinkedCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                AST records awaiting specimen linkage
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT PAGE -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    CURRENT PAGE
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-layout-text-window-reverse"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.PageNumber
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                of @(Model.TotalPages == 0 ? 1 : Model.TotalPages)
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SEARCH / FILTERS
+    ======================================================= -->
+
+    <div class="module-search-panel">
+
+        <form method="get">
+
+            <div class="search-row">
+
+
+                <div class="search-field search-field-wide">
+
+                    <label for="Search">
+                        Search
+                    </label>
+
+
+                    <input id="Search"
+                           name="Search"
+                           value="@Model.Search"
+                           class="form-control"
+                           placeholder="Specimen ID, LAN, site, or organism..." />
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="SiteCode">
+                        Site
+                    </label>
+
+
+                    <select id="SiteCode"
+                            name="SiteCode"
+                            class="form-select">
+
+                        <option value="">
+                            All sites
+                        </option>
+
+
+                        @foreach (var site in Model.AvailableSites)
+                        {
+                            if (
+                                string.Equals(
+                                    Model.SiteCode,
+                                    site,
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="@site"
+                                        selected>
+                                    @site
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@site">
+                                    @site
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="Lan">
+                        LAN
+                    </label>
+
+
+                    <input id="Lan"
+                           name="Lan"
+                           value="@Model.Lan"
+                           class="form-control"
+                           placeholder="MHK#####" />
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="LinkageStatus">
+                        Linkage
+                    </label>
+
+
+                    <select id="LinkageStatus"
+                            name="LinkageStatus"
+                            class="form-select">
+
+                        <option value="">
+                            All statuses
+                        </option>
+
+
+                        @if (
+                            string.Equals(
+                                Model.LinkageStatus,
+                                "Linked",
+                                StringComparison.OrdinalIgnoreCase)
+                        )
+                        {
+                            <option value="Linked"
+                                    selected>
+                                Linked
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Linked">
+                                Linked
+                            </option>
+                        }
+
+
+                        @if (
+                            string.Equals(
+                                Model.LinkageStatus,
+                                "Unlinked",
+                                StringComparison.OrdinalIgnoreCase)
+                        )
+                        {
+                            <option value="Unlinked"
+                                    selected>
+                                Unlinked
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Unlinked">
+                                Unlinked
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <div class="search-actions">
+
+                    <button type="submit"
+                            class="btn eps-btn-primary">
+
+                        <i class="bi bi-search"
+                           aria-hidden="true"></i>
+
+                        <span>
+                            Search
+                        </span>
+
+                    </button>
+
+
+                    <a href="/AST"
+                       class="btn eps-btn-secondary">
+
+                        <i class="bi bi-arrow-counterclockwise"
+                           aria-hidden="true"></i>
+
+                        <span>
+                            Clear
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ======================================================
+         RESULTS HEADER
+    ======================================================= -->
+
+    <div class="results-header">
+
+        <div>
+
+            <strong>
+                AST Laboratory Records
+            </strong>
+
+
+            <span>
+
+                Showing
+
+                @(Model.TotalRecords == 0
+                    ? 0
+                    : ((Model.PageNumber - 1) *
+                       IndexModel.PageSize) + 1)
+
+                –
+
+                @(Math.Min(
+                    Model.PageNumber *
+                    IndexModel.PageSize,
+                    Model.TotalRecords
+                ))
+
+                of
+
+                @Model.TotalRecords.ToString("N0")
+
+            </span>
+
+        </div>
+
+
+        <div>
+
+            <i class="bi bi-journal-text"
+               aria-hidden="true"></i>
+
+            Page
+            @Model.PageNumber
+            of
+            @(Model.TotalPages == 0
+                ? 1
+                : Model.TotalPages)
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         RESULTS TABLE
+    ======================================================= -->
+
+    <div class="module-table-card">
+
+        @if (Model.Records.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-clipboard-x"></i>
+
+                </div>
+
+
+                <h3>
+                    No AST records found
+                </h3>
+
+
+                <p>
+                    Try changing your search or filter criteria.
+                </p>
+
+
+                <a href="/AST"
+                   class="btn eps-btn-secondary">
+
+                    <i class="bi bi-arrow-counterclockwise"
+                       aria-hidden="true"></i>
+
+                    Clear Search
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Specimen ID
+                            </th>
+
+                            <th>
+                                LAN
+                            </th>
+
+                            <th>
+                                Site
+                            </th>
+
+                            <th>
+                                Organism
+                            </th>
+
+                            <th>
+                                MDR
+                            </th>
+
+                            <th>
+                                ESBL
+                            </th>
+
+                            <th>
+                                Linkage
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var record in Model.Records)
+                        {
+                            <tr>
+
+
+                                <td>
+
+                                    <div class="record-primary">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            record.SpecimenId)
+                                            ? "—"
+                                            : record.SpecimenId)
+
+                                    </div>
+
+
+                                    <div class="record-secondary">
+
+                                        AST ID
+                                        @record.AstRecordId
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="identifier-chip">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            record.Lan)
+                                            ? "—"
+                                            : record.Lan)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="site-chip">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            record.SiteCode)
+                                            ? "—"
+                                            : record.SiteCode)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="pathogen-list">
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.BacterialIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-bacterial">
+
+                                                @record.BacterialIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.ViralIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-viral">
+
+                                                @record.ViralIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.ParasiteIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-parasite">
+
+                                                @record.ParasiteIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            string.IsNullOrWhiteSpace(
+                                                record.BacterialIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                record.ViralIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                record.ParasiteIdentification)
+                                        )
+                                        {
+                                            <span class="record-secondary">
+                                                No organism recorded
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @(string.IsNullOrWhiteSpace(
+                                        record.MdrStatus)
+                                        ? "—"
+                                        : record.MdrStatus)
+
+                                </td>
+
+
+                                <td>
+
+                                    @(string.IsNullOrWhiteSpace(
+                                        record.EsblStatus)
+                                        ? "—"
+                                        : record.EsblStatus)
+
+                                </td>
+
+
+                                <!-- LINKAGE -->
+
+                                <td>
+
+                                    @if (
+                                        string.Equals(
+                                            record.LinkageStatus,
+                                            "Linked",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            <i class="bi bi-link-45deg"
+                                               aria-hidden="true"></i>
+
+                                            Linked
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-unlinked
+                                            eps-unlinked-table-chip">
+
+                                            <span class="
+                                                eps-unlinked-table-icon"
+                                                  aria-hidden="true">
+
+                                                <img src="@unlinkedAstIconUrl"
+                                                     alt="" />
+
+                                            </span>
+
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                record.LinkageStatus)
+                                                ? "Unlinked"
+                                                : record.LinkageStatus)
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td class="text-end">
+
+                                    <a asp-page="./View"
+                                       asp-route-id="@record.AstRecordId"
+                                       class="
+                                        btn
+                                        btn-sm
+                                        eps-btn-view">
+
+                                        <i class="bi bi-eye"
+                                           aria-hidden="true"></i>
+
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+
+        <!-- ==================================================
+             PAGINATION
+        =================================================== -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="module-pagination">
+
+                <div class="pagination-info">
+
+                    <i class="bi bi-journal-text"
+                       aria-hidden="true"></i>
+
+                    Page
+                    @Model.PageNumber
+                    of
+                    @Model.TotalPages
+
+                </div>
+
+
+                <div class="pagination-actions">
+
+                    @if (Model.PageNumber > 1)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-Lan="@Model.Lan"
+                           asp-route-SiteCode="@Model.SiteCode"
+                           asp-route-LinkageStatus="@Model.LinkageStatus"
+                           asp-route-PageNumber="@(Model.PageNumber - 1)"
+                           class="btn eps-btn-secondary">
+
+                            <i class="bi bi-chevron-left"
+                               aria-hidden="true"></i>
+
+                            Previous
+
+                        </a>
+                    }
+
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-Lan="@Model.Lan"
+                           asp-route-SiteCode="@Model.SiteCode"
+                           asp-route-LinkageStatus="@Model.LinkageStatus"
+                           asp-route-PageNumber="@(Model.PageNumber + 1)"
+                           class="btn eps-btn-primary">
+
+                            Next
+
+                            <i class="bi bi-chevron-right"
+                               aria-hidden="true"></i>
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

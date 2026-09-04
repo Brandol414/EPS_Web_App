@@ -1,0 +1,300 @@
+﻿@page "{id:long}"
+@model EPS_Web_App.Pages.Questionnaire.EditModel
+
+@{
+    ViewData["Title"] = "Edit Questionnaire Record";
+}
+
+<div class="questionnaire-create-page">
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="create-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                ADMINISTRATIVE DATA CORRECTION
+            </div>
+
+            <h1 class="module-title">
+                Edit Questionnaire Record
+            </h1>
+
+            <p class="module-description">
+                Correct questionnaire information. Every changed
+                field is recorded in the audit trail.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a asp-page="./View"
+               asp-route-id="@Model.Id"
+               class="btn eps-btn-secondary">
+
+                ← Cancel
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         RECORD SUMMARY
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    RECORD
+                </div>
+
+                <h2>
+                    @Model.SpecimenId
+                </h2>
+
+                <p>
+                    Questionnaire ID:
+                    @Model.Id
+
+                    <span style="margin:0 6px;">
+                        |
+                    </span>
+
+                    Site:
+                    @(
+                        string.IsNullOrWhiteSpace(Model.SiteCode)
+                            ? "—"
+                            : Model.SiteCode
+                    )
+
+                    <span style="margin:0 6px;">
+                        |
+                    </span>
+
+                    LAN:
+                    @(
+                        string.IsNullOrWhiteSpace(Model.Lan)
+                            ? "—"
+                            : Model.Lan
+                    )
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         VALIDATION
+    ======================================================= -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="validation-summary">
+    </div>
+
+
+    <form method="post">
+
+        <input type="hidden"
+               asp-for="Id" />
+
+
+        <!-- ==================================================
+             QUESTIONNAIRE SECTIONS
+        =================================================== -->
+        @foreach (
+                    var editSection
+                    in Model.Sections)
+        {
+            <section class="entry-section">
+
+                <div class="entry-section-header">
+
+                    <div class="entry-section-number">
+                        @editSection.Number
+                    </div>
+
+                    <div>
+
+                        <div class="entry-section-kicker">
+                            ADMINISTRATIVE CORRECTION
+                        </div>
+
+                        <h2>
+                            @editSection.Title
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="entry-grid entry-grid-3">
+
+                    @foreach (
+                        var field
+                        in editSection.Fields)
+                    {
+                        <div class="entry-field">
+
+                            <label for="field_@field.Name">
+                                @field.Label
+                            </label>
+
+
+                            <input type="@Model.GetInputType(field.Name)"
+                                   id="field_@field.Name"
+                                   name="Values[@field.Name]"
+                                   value="@Model.FormatValueForInput(
+                                                                   field.Name,
+                                                                   Model.Values.TryGetValue(
+                                                                       field.Name,
+                                                                       out var value)
+                                                                       ? value
+                                                                       : null)"
+                                   class="form-control"
+                                   autocomplete="off" />
+
+
+                            @if (
+                                Model.GetInputType(field.Name) == "date"
+                            )
+                            {
+                                <div class="field-help">
+                                    Select a date using the calendar control.
+                                </div>
+                            }
+                            else if (
+                                Model.GetInputType(field.Name) == "time"
+                            )
+                            {
+                                <div class="field-help">
+                                    Select a time using the time control.
+                                </div>
+                            }
+
+
+                            @if (
+                                field.Name ==
+                                nameof(QuestionnaireEntry.SpecimenId)
+                            )
+                            {
+                                <div class="field-help">
+
+                                    Specimen ID may be corrected by
+                                    an administrator.
+
+                                    It must remain unique and follow
+                                    the EPS1549-SITE-####A/B format.
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                </div>
+
+            </section>
+        }
+
+
+        <!-- ==================================================
+             AUDIT REASON
+        =================================================== -->
+
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        AUDIT REQUIREMENT
+                    </div>
+
+                    <h2>
+                        Reason for Correction
+                    </h2>
+
+                    <p>
+                        Explain why the record is being corrected.
+                        This reason is stored with every changed field.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-field">
+
+                <label asp-for="Reason">
+
+                    Correction Reason
+
+                    <span class="required-mark">
+                        *
+                    </span>
+
+                </label>
+
+
+                <textarea asp-for="Reason"
+                          class="form-control"
+                          rows="4"
+                          maxlength="2000"
+                          required
+                          placeholder="For example: Specimen ID corrected against the original laboratory form."></textarea>
+
+
+                <span asp-validation-for="Reason"
+                      class="field-error">
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACTIONS
+        =================================================== -->
+
+        <div class="create-form-actions">
+
+            <a asp-page="./View"
+               asp-route-id="@Model.Id"
+               class="btn eps-btn-secondary">
+
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="btn eps-btn-primary">
+
+                Save Corrections
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

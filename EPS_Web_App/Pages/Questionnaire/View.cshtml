@@ -1,0 +1,1704 @@
+﻿@page "{id:long}"
+@model global::EPS_Web_App.Pages.Questionnaire.ViewModel
+
+@{
+    ViewData["Title"] = "Questionnaire Record";
+}
+
+
+@if (Model.Record == null)
+{
+    <div class="questionnaire-view-page">
+
+        <div class="module-empty-state">
+
+            <div class="module-empty-icon">
+                Q
+            </div>
+
+            <h3>
+                Questionnaire record not found
+            </h3>
+
+            <p>
+                The requested questionnaire record could not be located.
+            </p>
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+                ← Back to Questionnaire
+            </a>
+
+        </div>
+
+    </div>
+
+    return;
+}
+
+
+<div class="questionnaire-view-page">
+
+    <!-- =========================================================
+     HEADER
+========================================================== -->
+
+    <div class="record-view-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                QUESTIONNAIRE RECORD
+            </div>
+
+            <h1 class="record-view-title">
+                @Model.Record.SpecimenId
+            </h1>
+
+            <div class="record-view-meta">
+
+                <span>
+                    Questionnaire ID:
+                    @Model.Record.QuestionnaireId
+                </span>
+
+                <span class="record-meta-divider">
+                    |
+                </span>
+
+                <span>
+                    Site:
+                    @(string.IsNullOrWhiteSpace(Model.Record.SiteCode)
+                        ? "—"
+                        : Model.Record.SiteCode)
+                </span>
+
+                <span class="record-meta-divider">
+                    |
+                </span>
+
+                <span>
+                    LAN:
+                    @(string.IsNullOrWhiteSpace(Model.Record.Lan)
+                        ? "—"
+                        : Model.Record.Lan)
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         ACTIONS
+    ====================================================== -->
+
+        <div class="record-view-actions">
+
+            @if (User.IsInRole("Administrator"))
+            {
+                <a asp-page="./Edit"
+                   asp-route-id="@Model.Record.QuestionnaireId"
+                   class="btn eps-btn-primary">
+
+                    Edit Record
+
+                </a>
+            }
+
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to Questionnaire
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         RECORD IDENTITY / SUMMARY
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    RECORD SUMMARY
+                </div>
+
+                <h2>
+                    Surveillance Record
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Specimen ID
+                </span>
+
+                <strong class="identifier-text">
+                    @(string.IsNullOrWhiteSpace(Model.Record.SpecimenId)
+                        ? "—"
+                        : Model.Record.SpecimenId)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Site Code
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Record.SiteCode)
+                        ? "—"
+                        : Model.Record.SiteCode)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    LAN
+                </span>
+
+                <strong class="identifier-text">
+                    @(string.IsNullOrWhiteSpace(Model.Record.Lan)
+                        ? "—"
+                        : Model.Record.Lan)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Isolation Date
+                </span>
+
+                <strong>
+                    @DisplayDate(Model.Record.IsolationDate)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Age
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Record.Age)
+                        ? "—"
+                        : Model.Record.Age)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Gender
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Record.Gender)
+                        ? "—"
+                        : Model.Record.Gender)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Admission Status
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Record.Admitted)
+                        ? "—"
+                        : Model.Record.Admitted)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Disposition
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Record.Disposition)
+                        ? "—"
+                        : Model.Record.Disposition)
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 01 — RECORD IDENTITY
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 01
+                </div>
+
+                <h2>
+                    Record Identity
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Specimen ID
+                </span>
+
+                <strong class="identifier-text">
+                    @Display(Model.Record.SpecimenId)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Site Code
+                </span>
+
+                <strong>
+                    @Display(Model.Record.SiteCode)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    LAN
+                </span>
+
+                <strong class="identifier-text">
+                    @Display(Model.Record.Lan)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Isolation Date
+                </span>
+
+                <strong>
+                    @DisplayDate(Model.Record.IsolationDate)
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 02 — PARTICIPANT
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 02
+                </div>
+
+                <h2>
+                    Participant Information
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Age</span>
+                <strong>@Display(Model.Record.Age)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Date of Birth</span>
+                <strong>@DisplayDate(Model.Record.DateOfBirth)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Gender</span>
+                <strong>@Display(Model.Record.Gender)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Residence</span>
+                <strong>@Display(Model.Record.Residence)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Occupation</span>
+                <strong>@Display(Model.Record.Occupation)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Rank</span>
+                <strong>@Display(Model.Record.Rank)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Main Job</span>
+                <strong>@Display(Model.Record.MainJob)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 03 — ROTAVIRUS / HIV
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 03
+                </div>
+
+                <h2>
+                    Rotavirus Vaccination & HIV Status
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Rotavirus Dose 1 Status</span>
+                <strong>@Display(Model.Record.RotavirusDose1Status)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Rotavirus Dose 1 Date</span>
+                <strong>@DisplayDate(Model.Record.RotavirusDose1Date)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Rotavirus Dose 2 Status</span>
+                <strong>@Display(Model.Record.RotavirusDose2Status)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Rotavirus Dose 2 Date</span>
+                <strong>@DisplayDate(Model.Record.RotavirusDose2Date)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Rotavirus Vaccine</span>
+                <strong>@Display(Model.Record.OtherRotavirusVaccineStatus)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Vaccine Date</span>
+                <strong>@DisplayDate(Model.Record.OtherRotavirusVaccineDate)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>HIV Status</span>
+                <strong>@Display(Model.Record.HivStatus)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 04 — ONSET / DIARRHOEA
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 04
+                </div>
+
+                <h2>
+                    Symptom Onset & Diarrhoeal Illness
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>First Symptom</span>
+                <strong>@Display(Model.Record.FirstSymptom)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Symptom Onset Date</span>
+                <strong>@DisplayDate(Model.Record.SymptomOnsetDate)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Symptom Onset Time</span>
+                <strong>@DisplayTime(Model.Record.SymptomOnsetTime)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Diarrhea Duration</span>
+                <strong>@Display(Model.Record.DiarrheaDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Maximum Loose Stools — 24 Hours</span>
+                <strong>@Display(Model.Record.MaxLooseStools24h)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Loose Stools — 8 Hours</span>
+                <strong>@Display(Model.Record.LooseStools8h)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Loose Stools — 24 Hours</span>
+                <strong>@Display(Model.Record.LooseStools24h)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Mucous Stool</span>
+                <strong>@Display(Model.Record.MucousStool)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Bloody Stool</span>
+                <strong>@Display(Model.Record.BloodyStool)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Bloody Stool Duration</span>
+                <strong>@Display(Model.Record.BloodyStoolDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Rice-water Stool</span>
+                <strong>@Display(Model.Record.RiceWaterStool)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 05 — ASSOCIATED SYMPTOMS
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 05
+                </div>
+
+                <h2>
+                    Associated Symptoms
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Abdominal Cramps</span>
+                <strong>@Display(Model.Record.AbdominalCramps)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Abdominal Cramps Duration</span>
+                <strong>@Display(Model.Record.AbdominalCrampsDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Abdominal Cramps Severity</span>
+                <strong>@Display(Model.Record.AbdominalCrampsSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Excessive Gas</span>
+                <strong>@Display(Model.Record.ExcessiveGas)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Excessive Gas Duration</span>
+                <strong>@Display(Model.Record.ExcessiveGasDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Excessive Gas Severity</span>
+                <strong>@Display(Model.Record.ExcessiveGasSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Nausea</span>
+                <strong>@Display(Model.Record.Nausea)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Nausea Duration</span>
+                <strong>@Display(Model.Record.NauseaDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Nausea Severity</span>
+                <strong>@Display(Model.Record.NauseaSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fever</span>
+                <strong>@Display(Model.Record.Fever)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fever Duration</span>
+                <strong>@Display(Model.Record.FeverDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fever Severity</span>
+                <strong>@Display(Model.Record.FeverSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Painful Straining During Stool</span>
+                <strong>@Display(Model.Record.PainfulStrainingStool)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Painful Straining Duration</span>
+                <strong>@Display(Model.Record.PainfulStrainingDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Painful Straining Severity</span>
+                <strong>@Display(Model.Record.PainfulStrainingSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Malaise / Fatigue</span>
+                <strong>@Display(Model.Record.MalaiseFatigue)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Malaise / Fatigue Duration</span>
+                <strong>@Display(Model.Record.MalaiseFatigueDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Malaise / Fatigue Severity</span>
+                <strong>@Display(Model.Record.MalaiseFatigueSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Vomiting</span>
+                <strong>@Display(Model.Record.Vomiting)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Vomiting Duration</span>
+                <strong>@Display(Model.Record.VomitingDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Number of Vomits</span>
+                <strong>@Display(Model.Record.VomitingCount)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Vomiting Severity</span>
+                <strong>@Display(Model.Record.VomitingSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Headache</span>
+                <strong>@Display(Model.Record.Headache)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Headache Duration</span>
+                <strong>@Display(Model.Record.HeadacheDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Headache Severity</span>
+                <strong>@Display(Model.Record.HeadacheSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Loss of Appetite</span>
+                <strong>@Display(Model.Record.LossOfAppetite)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Loss of Appetite Duration</span>
+                <strong>@Display(Model.Record.LossOfAppetiteDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Lightheadedness</span>
+                <strong>@Display(Model.Record.Lightheadedness)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Lightheadedness Duration</span>
+                <strong>@Display(Model.Record.LightheadednessDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Lightheadedness Severity</span>
+                <strong>@Display(Model.Record.LightheadednessSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Stool Urgency</span>
+                <strong>@Display(Model.Record.StoolUrgency)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Stool Urgency Duration</span>
+                <strong>@Display(Model.Record.StoolUrgencyDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Stool Urgency Severity</span>
+                <strong>@Display(Model.Record.StoolUrgencySeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Muscle Aches</span>
+                <strong>@Display(Model.Record.MuscleAches)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Muscle Aches Duration</span>
+                <strong>@Display(Model.Record.MuscleAchesDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Muscle Aches Severity</span>
+                <strong>@Display(Model.Record.MuscleAchesSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Joint Aches</span>
+                <strong>@Display(Model.Record.JointAches)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Joint Aches Duration</span>
+                <strong>@Display(Model.Record.JointAchesDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Joint Aches Severity</span>
+                <strong>@Display(Model.Record.JointAchesSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fecal Incontinence</span>
+                <strong>@Display(Model.Record.FecalIncontinence)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fecal Incontinence Duration</span>
+                <strong>@Display(Model.Record.FecalIncontinenceDuration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Fecal Incontinence Severity</span>
+                <strong>@Display(Model.Record.FecalIncontinenceSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Symptoms</span>
+                <strong>@Display(Model.Record.OtherSymptoms)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Symptoms Specified</span>
+                <strong>@Display(Model.Record.OtherSymptomsSpecified)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Symptoms Severity</span>
+                <strong>@Display(Model.Record.OtherSymptomsSeverity)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Additional Symptoms</span>
+                <strong>@Display(Model.Record.AdditionalSymptoms)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Additional Symptoms Severity</span>
+                <strong>@Display(Model.Record.AdditionalSymptomsSeverity)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 06 — CLINICAL ASSESSMENT
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 06
+                </div>
+
+                <h2>
+                    Clinical Assessment
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>General Condition</span>
+                <strong>@Display(Model.Record.GeneralCondition)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Body Temperature</span>
+                <strong>@Display(Model.Record.BodyTemperature)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Body Weight</span>
+                <strong>@Display(Model.Record.BodyWeight)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Height</span>
+                <strong>@Display(Model.Record.Height)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Blood Pressure</span>
+                <strong>@Display(Model.Record.BloodPressure)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Respiratory Rate</span>
+                <strong>@Display(Model.Record.RespiratoryRate)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Malnutrition Status</span>
+                <strong>@Display(Model.Record.MalnutritionStatus)</strong>
+            </div>
+
+        </div>
+
+
+        <div class="record-stat-row">
+
+            <div class="record-stat-card">
+
+                <span>
+                    CHILD ASSESSMENT
+                </span>
+
+                <strong>
+                    @(
+                        string.IsNullOrWhiteSpace(
+                            Model.Record.ChildAssessment)
+                            ? "—"
+                            : "Recorded"
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-stat-card">
+
+                <span>
+                    ADULT ASSESSMENT
+                </span>
+
+                <strong>
+                    @(
+                        string.IsNullOrWhiteSpace(
+                            Model.Record.PatientClinicalState)
+                            ? "—"
+                            : "Recorded"
+                    )
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Child Consciousness Response</span>
+                <strong>@Display(Model.Record.ChildConsciousnessResponse)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Child Restlessness</span>
+                <strong>@Display(Model.Record.ChildRestlessness)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Child Assessment</span>
+                <strong>@Display(Model.Record.ChildAssessment)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Skin Pinch-back</span>
+                <strong>@Display(Model.Record.SkinPinchBack)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Capillary Refill</span>
+                <strong>@Display(Model.Record.CapillaryRefill)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Drinking / Breastfeeding</span>
+                <strong>@Display(Model.Record.ChildDrinkingBreastfeeding)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>MUAC</span>
+                <strong>@Display(Model.Record.Muac)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Adult Consciousness Response</span>
+                <strong>@Display(Model.Record.AdultConsciousnessResponse)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Patient Clinical State</span>
+                <strong>@Display(Model.Record.PatientClinicalState)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Illness Functional Impact</span>
+                <strong>@Display(Model.Record.IllnessFunctionalImpact)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 07 — TREATMENT / MANAGEMENT
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 07
+                </div>
+
+                <h2>
+                    Treatment & Management
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-stat-row">
+
+            <div class="record-stat-card">
+
+                <span>
+                    CARE PATHWAY
+                </span>
+
+                <strong>
+                    @(
+                        string.Equals(
+                            Model.Record.Admitted,
+                            "Yes",
+                            StringComparison.OrdinalIgnoreCase)
+                            ? "Admitted"
+                            : string.Equals(
+                                Model.Record.Admitted,
+                                "No",
+                                StringComparison.OrdinalIgnoreCase)
+                                ? "Outpatient"
+                                : "—"
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-stat-card">
+
+                <span>
+                    DISPOSITION
+                </span>
+
+                <strong>
+                    @Display(Model.Record.Disposition)
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Outpatient Treatment</span>
+                <strong>@Display(Model.Record.OutpatientTreatment)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Treatment Given</span>
+                <strong>@Display(Model.Record.TreatmentGiven)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Admission Date</span>
+                <strong>@DisplayDate(Model.Record.AdmissionDate)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Admission Time</span>
+                <strong>@DisplayTime(Model.Record.AdmissionTime)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Oral Rehydration</span>
+                <strong>@Display(Model.Record.OralRehydration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>IV Rehydration</span>
+                <strong>@Display(Model.Record.IvRehydration)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Other Treatment</span>
+                <strong>@Display(Model.Record.OtherTreatment)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 08 — DISPOSITION / OUTCOME
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 08
+                </div>
+
+                <h2>
+                    Disposition & Outcome
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+                <span>Disposition</span>
+                <strong>@Display(Model.Record.Disposition)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Disposition Date</span>
+                <strong>@DisplayDate(Model.Record.DispositionDate)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Disposition Time</span>
+                <strong>@DisplayTime(Model.Record.DispositionTime)</strong>
+            </div>
+
+            <div class="record-info-item">
+                <span>Discharge / Death Diagnosis</span>
+                <strong>@Display(Model.Record.DischargeDeathDiagnosis)</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 09 — LABORATORY
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 09
+                </div>
+
+                <h2>
+                    Laboratory Identification
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="pathogen-view-grid">
+
+
+            <div class="pathogen-view-card pathogen-view-bacterial">
+
+                <div class="pathogen-view-label">
+                    BACTERIAL
+                </div>
+
+                <div class="pathogen-view-value">
+
+                    @(
+                        string.IsNullOrWhiteSpace(
+                            Model.Record.BacterialIdentification)
+                            ? "No result recorded"
+                            : Model.Record.BacterialIdentification
+                    )
+
+                </div>
+
+            </div>
+
+
+            <div class="pathogen-view-card pathogen-view-viral">
+
+                <div class="pathogen-view-label">
+                    VIRAL
+                </div>
+
+                <div class="pathogen-view-value">
+
+                    @(
+                        string.IsNullOrWhiteSpace(
+                            Model.Record.ViralIdentification)
+                            ? "No result recorded"
+                            : Model.Record.ViralIdentification
+                    )
+
+                </div>
+
+            </div>
+
+
+            <div class="pathogen-view-card pathogen-view-parasite">
+
+                <div class="pathogen-view-label">
+                    PARASITE
+                </div>
+
+                <div class="pathogen-view-value">
+
+                    @(
+                        string.IsNullOrWhiteSpace(
+                            Model.Record.ParasiteIdentification)
+                            ? "No result recorded"
+                            : Model.Record.ParasiteIdentification
+                    )
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 10 — WATER
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SECTION 10
+                </div>
+
+                <h2>
+                    Water Source & Treatment
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+            <div class="record-info-item">
+
+                <span>
+                    Water Source
+                </span>
+
+                <strong>
+                    @Display(Model.Record.WaterSourceType)
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Water Treatment
+                </span>
+
+                <strong>
+                    @Display(Model.Record.WaterTreatment)
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         LINKED AST RECORDS
+    ========================================================== -->
+
+    <section class="record-section"
+             id="linkedRecords">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    LINKED DATA
+                </div>
+
+                <h2>
+                    Antimicrobial Susceptibility Testing
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-stat-row">
+
+            <div class="record-stat-card">
+
+                <span>
+                    LINKED AST RECORDS
+                </span>
+
+                <strong>
+                    @Model.AstCount
+                </strong>
+
+            </div>
+
+
+            <div class="record-stat-card">
+
+                <span>
+                    OPEN RECONCILIATION ALERTS
+                </span>
+
+                <strong>
+                    @Model.OpenAlertCount
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.AstRecords.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No linked AST records
+                </strong>
+
+                <span>
+                    No AST record is currently linked to
+                    @Model.Record.SpecimenId.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="record-subtable">
+
+                <div class="record-subtable-header">
+
+                    <div>
+                        AST ID
+                    </div>
+
+                    <div>
+                        Specimen ID
+                    </div>
+
+                    <div>
+                        Site
+                    </div>
+
+                    <div>
+                        LAN
+                    </div>
+
+                </div>
+
+
+                @foreach (var ast in Model.AstRecords)
+                {
+                    <div class="record-subtable-row">
+
+                        <div>
+
+                            <span class="identifier-chip">
+                                @ast.AstRecordId
+                            </span>
+
+                        </div>
+
+
+                        <div class="identifier-text">
+
+                            @(
+                                string.IsNullOrWhiteSpace(
+                                    ast.SpecimenId)
+                                    ? "—"
+                                    : ast.SpecimenId
+                            )
+
+                        </div>
+
+
+                        <div>
+
+                            @(
+                                string.IsNullOrWhiteSpace(
+                                    ast.SiteCode)
+                                    ? "—"
+                                    : ast.SiteCode
+                            )
+
+                        </div>
+
+
+                        <div>
+
+                            @(
+                                string.IsNullOrWhiteSpace(
+                                    ast.Lan)
+                                    ? "—"
+                                    : ast.Lan
+                            )
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- =========================================================
+         RECONCILIATION ALERTS
+    ========================================================== -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    DATA QUALITY
+                </div>
+
+                <h2>
+                    Reconciliation Alerts
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.Alerts.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No reconciliation alerts
+                </strong>
+
+                <span>
+                    No reconciliation alert is currently recorded for
+                    @Model.Record.SpecimenId.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="record-alert-list">
+
+                @foreach (var alert in Model.Alerts)
+                {
+                    var priorityClass =
+                        string.Equals(
+                            alert.Priority,
+                            "Critical",
+                            StringComparison.OrdinalIgnoreCase)
+                            ||
+                        string.Equals(
+                            alert.Priority,
+                            "High",
+                            StringComparison.OrdinalIgnoreCase)
+                            ? "alert-high"
+                            : string.Equals(
+                                alert.Priority,
+                                "Medium",
+                                StringComparison.OrdinalIgnoreCase)
+                                ? "alert-medium"
+                                : "alert-low";
+
+
+                    <div class="record-alert-item">
+
+                        <div class="record-alert-indicator
+                            @priorityClass">
+                        </div>
+
+
+                        <div class="record-alert-body">
+
+                            <div class="record-alert-title-row">
+
+                                <strong>
+                                    @Display(alert.AlertType)
+                                </strong>
+
+
+                                <span class="record-alert-priority">
+
+                                    @Display(alert.Priority)
+
+                                    ·
+
+                                    @Display(alert.Status)
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                @Display(alert.Description)
+                            </p>
+
+
+                            <div class="record-alert-meta">
+
+                                Created:
+                                @Display(alert.CreatedAt)
+
+                                @if (!string.IsNullOrWhiteSpace(
+                                    alert.ResolvedBy))
+                                {
+                                    <span>
+                                        · Resolved by:
+                                        @alert.ResolvedBy
+                                    </span>
+                                }
+
+                                @if (
+                                    alert.ResolvedAt.HasValue)
+                                {
+                                    <span>
+                                        · Resolved:
+                                        @alert.ResolvedAt
+                                    </span>
+                                }
+
+                            </div>
+
+
+                            @if (!string.IsNullOrWhiteSpace(
+                                alert.ResolutionNote))
+                            {
+                                <div class="record-notice record-notice-neutral"
+                                     style="margin-top: 10px;">
+
+                                    <strong>
+                                        Resolution
+                                    </strong>
+
+                                    <span>
+                                        @alert.ResolutionNote
+                                    </span>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- =========================================================
+         FOOTER ACTIONS
+    ========================================================== -->
+
+    <div class="record-view-actions"
+         style="justify-content: space-between; margin-top: 20px;">
+
+        <a asp-page="./Index"
+           class="btn eps-btn-secondary">
+
+            ← Back to Questionnaire
+
+        </a>
+
+
+        <a href="#"
+           class="btn eps-btn-secondary">
+
+            ↑ Back to Top
+
+        </a>
+
+    </div>
+
+</div>
+
+
+@functions
+{
+    private static string Display(object? value)
+    {
+        if (value == null)
+        {
+            return "—";
+        }
+
+        var text =
+            Convert.ToString(value);
+
+        return string.IsNullOrWhiteSpace(text)
+            ? "—"
+            : text;
+    }
+
+    private static string DisplayDate(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "—";
+        }
+
+        value = value.Trim();
+
+        var acceptedFormats = new[]
+        {
+            "yyyy-MM-dd",
+            "dd/MM/yyyy",
+            "d/M/yyyy",
+            "MM/dd/yyyy",
+            "M/d/yyyy",
+            "dd-MM-yyyy",
+            "d-M-yyyy",
+            "MM-dd-yyyy",
+            "M-d-yyyy",
+            "dd MMM yyyy",
+            "d MMM yyyy",
+            "dd-MMM-yyyy",
+            "d-MMM-yyyy",
+            "yyyy/MM/dd"
+        };
+
+        if (DateTime.TryParseExact(
+            value,
+            acceptedFormats,
+            System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.None,
+            out var parsedDate))
+        {
+            return parsedDate.ToString(
+                "dd/MM/yyyy",
+                System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        return value;
+    }
+
+    private static string DisplayTime(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "—";
+        }
+
+        value = value.Trim();
+
+        if (TimeSpan.TryParseExact(
+            value,
+            new[] { @"hh\:mm", @"h\:mm" },
+            System.Globalization.CultureInfo.InvariantCulture,
+            out var parsedTime))
+        {
+            return parsedTime.ToString(
+                @"hh\:mm",
+                System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        return value;
+    }
+}

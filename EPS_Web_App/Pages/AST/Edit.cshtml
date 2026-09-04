@@ -1,0 +1,517 @@
+﻿@page "{id:long}"
+@model EPS_Web_App.Pages.AST.EditModel
+
+@{
+    ViewData["Title"] = "Edit AST Record";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+
+        <div>
+
+            <div class="text-uppercase text-muted small fw-semibold">
+                AST / ADMINISTRATIVE EDIT
+            </div>
+
+            <h1 class="h2 mb-1">
+                Edit AST Record
+            </h1>
+
+            <p class="text-muted mb-0">
+                Correct laboratory AST information. Every change is
+                recorded in the audit trail.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2">
+
+            <a asp-page="./View"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-secondary">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SECURITY NOTICE
+    ========================================================== -->
+
+    <div class="alert alert-warning border mb-4">
+
+        <div class="fw-semibold mb-1">
+            Administrative edit
+        </div>
+
+        <div class="small">
+            This page is restricted to authorized administrators
+            and data managers. Changes are permanently recorded
+            with the editor identity, timestamp, old value,
+            new value, and edit reason.
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         VALIDATION SUMMARY
+    ========================================================== -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <form method="post">
+
+        <input type="hidden"
+               asp-for="Id" />
+
+
+        <!-- =====================================================
+             SECTION 01 — RECORD IDENTITY
+        ====================================================== -->
+
+        <section class="card shadow-sm mb-4">
+
+            <div class="card-header bg-transparent">
+
+                <div class="text-uppercase text-muted small fw-semibold">
+                    Section 01
+                </div>
+
+                <h2 class="h5 mb-0">
+                    Record Identity
+                </h2>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    @foreach (
+                        var field
+                        in Model.Sections
+                            .First(x => x.Number == "01")
+                            .Fields)
+                    {
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold"
+                                   for="field_@field.Name">
+
+                                @field.Label
+
+                            </label>
+
+
+                            @if (
+                                string.Equals(
+                                    field.Name,
+                                    nameof(AstRecord.MonthCollected),
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <input type="month"
+                                       id="field_@field.Name"
+                                       name="Values[@field.Name]"
+                                       value="@Model.FormatMonthForInput(
+                                                                           Model.Values.TryGetValue(
+                                                                               field.Name,
+                                                                               out var monthValue)
+                                                                               ? monthValue
+                                                                               : null)"
+                                       class="form-control" />
+
+                                <div class="form-text">
+                                    Select the collection month. The database stores
+                                    the canonical value as yyyy-MM-01.
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="text"
+                                       id="field_@field.Name"
+                                       name="Values[@field.Name]"
+                                       value="@(Model.Values.TryGetValue(
+                                                                           field.Name,
+                                                                           out var value)
+                                                                           ? value
+                                                                           : null)"
+                                       class="form-control"
+                                       autocomplete="off" />
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    field.Name,
+                                    nameof(AstRecord.SpecimenId),
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <div class="form-text">
+
+                                    Specimen ID is the primary
+                                    Questionnaire ↔ AST linkage identity.
+
+                                </div>
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    field.Name,
+                                    nameof(AstRecord.SiteCode),
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <div class="form-text">
+
+                                    Site code is a secondary
+                                    reconciliation check.
+
+                                </div>
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    field.Name,
+                                    nameof(AstRecord.Lan),
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <div class="form-text">
+
+                                    LAN is retained as a secondary
+                                    identity check.
+
+                                </div>
+                            }
+
+                            <span asp-validation-for="Values[@field.Name]"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 02 — PARTICIPANT / CLINICAL CONTEXT
+        ====================================================== -->
+
+        <section class="card shadow-sm mb-4">
+
+            <div class="card-header bg-transparent">
+
+                <div class="text-uppercase text-muted small fw-semibold">
+                    Section 02
+                </div>
+
+                <h2 class="h5 mb-0">
+                    Participant / Clinical Context
+                </h2>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    @foreach (
+                        var field
+                        in Model.Sections
+                            .First(x => x.Number == "02")
+                            .Fields)
+                    {
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold"
+                                   for="field_@field.Name">
+
+                                @field.Label
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="field_@field.Name"
+                                   name="Values[@field.Name]"
+                                   value="@(Model.Values.TryGetValue(
+                                                                   field.Name,
+                                                                   out var value)
+                                                                   ? value
+                                                                   : null)"
+                                   class="form-control"
+                                   autocomplete="off" />
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 03 — LABORATORY IDENTIFICATION
+        ====================================================== -->
+
+        <section class="card shadow-sm mb-4">
+
+            <div class="card-header bg-transparent">
+
+                <div class="text-uppercase text-muted small fw-semibold">
+                    Section 03
+                </div>
+
+                <h2 class="h5 mb-0">
+                    Laboratory Identification
+                </h2>
+
+                <div class="small text-muted mt-1">
+
+                    These fields participate directly in
+                    Questionnaire ↔ AST reconciliation.
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    @foreach (
+                        var field
+                        in Model.Sections
+                            .First(x => x.Number == "03")
+                            .Fields)
+                    {
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold"
+                                   for="field_@field.Name">
+
+                                @field.Label
+
+                            </label>
+
+
+                            <textarea id="field_@field.Name"
+                                      name="Values[@field.Name]"
+                                      class="form-control"
+                                      rows="2">@(
+                                Model.Values.TryGetValue(
+                                    field.Name,
+                                    out var value)
+                                    ? value
+                                    : null
+                            )</textarea>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 04 — ANTIMICROBIAL SUSCEPTIBILITY
+        ====================================================== -->
+
+        <section class="card shadow-sm mb-4">
+
+            <div class="card-header bg-transparent">
+
+                <div class="text-uppercase text-muted small fw-semibold">
+                    Section 04
+                </div>
+
+                <h2 class="h5 mb-0">
+                    Antimicrobial Susceptibility Results
+                </h2>
+
+                <div class="small text-muted mt-1">
+
+                    MIC and interpretation values are editable
+                    as laboratory AST data.
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    @foreach (
+                        var field
+                        in Model.Sections
+                            .First(x => x.Number == "04")
+                            .Fields)
+                    {
+                        <div class="col-lg-4 col-md-6">
+
+                            <label class="form-label fw-semibold"
+                                   for="field_@field.Name">
+
+                                @field.Label
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="field_@field.Name"
+                                   name="Values[@field.Name]"
+                                   value="@(Model.Values.TryGetValue(
+                                                                   field.Name,
+                                                                   out var value)
+                                                                   ? value
+                                                                   : null)"
+                                   class="form-control"
+                                   autocomplete="off" />
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             REQUIRED EDIT REASON
+        ====================================================== -->
+
+        <section class="card border-warning shadow-sm mb-4">
+
+            <div class="card-header bg-transparent">
+
+                <div class="text-uppercase text-warning small fw-semibold">
+                    Required
+                </div>
+
+                <h2 class="h5 mb-0">
+                    Reason for Edit
+                </h2>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <label asp-for="Reason"
+                       class="form-label fw-semibold">
+
+                    Edit reason
+
+                </label>
+
+
+                <textarea asp-for="Reason"
+                          class="form-control"
+                          rows="4"
+                          maxlength="2000"
+                          required
+                          placeholder="Explain why this AST record is being corrected or completed."></textarea>
+
+
+                <div class="form-text">
+
+                    Required before the record can be saved.
+                    This reason will be attached to every audit
+                    entry generated by this edit.
+
+                </div>
+
+
+                <span asp-validation-for="Reason"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SAVE ACTIONS
+        ====================================================== -->
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-5">
+
+            <div class="small text-muted">
+
+                <strong>Editor:</strong>
+                @Model.CurrentUserName
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <a asp-page="./View"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-secondary">
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary px-4">
+
+                    Save AST Changes
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

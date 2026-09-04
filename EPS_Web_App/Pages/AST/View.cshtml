@@ -1,0 +1,1965 @@
+﻿@page "{id:long}"
+@model EPS_Web_App.Pages.AST.ViewModel
+
+@{
+    ViewData["Title"] = "AST Record";
+
+
+    string Display(
+        string? value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? "—"
+            : value;
+    }
+
+
+    // =========================================================
+    // PRE-FORMATTED DATE VALUES
+    //
+    // Calculate these before the HTML is rendered so Razor does
+    // not interpret chained date methods as page content.
+    // =========================================================
+
+    var createdText =
+        Model.Record != null
+            ? Model.Record.CreatedAt
+                .ToLocalTime()
+                .ToString("dd MMM yyyy HH:mm")
+            : string.Empty;
+
+
+    var updatedText =
+        Model.Record?.UpdatedAt.HasValue == true
+            ? Model.Record.UpdatedAt.Value
+                .ToLocalTime()
+                .ToString("dd MMM yyyy HH:mm")
+            : "—";
+}
+
+
+@if (Model.Record == null)
+{
+    <div class="questionnaire-view-page">
+
+        <div class="module-empty-state">
+
+            <div class="module-empty-icon">
+                A
+            </div>
+
+            <h3>
+                AST record not found
+            </h3>
+
+            <p>
+                The requested antimicrobial susceptibility
+                record could not be located.
+            </p>
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to AST Laboratory
+
+            </a>
+
+        </div>
+
+    </div>
+
+    return;
+}
+
+
+<div class="questionnaire-view-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="record-view-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                AST LABORATORY RECORD
+            </div>
+
+            <h1 class="record-view-title">
+
+                @Display(
+                    Model.Record.SpecimenId
+                )
+
+            </h1>
+
+            <div class="record-view-meta">
+
+                <span>
+                    AST ID:
+                    @Model.Record.AstRecordId
+                </span>
+
+                <span class="record-meta-divider">
+                    |
+                </span>
+
+                <span>
+                    Site:
+                    @Display(
+                        Model.Record.SiteCode
+                    )
+                </span>
+
+                <span class="record-meta-divider">
+                    |
+                </span>
+
+                <span>
+                    LAN:
+                    @Display(
+                        Model.Record.Lan
+                    )
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-view-actions">
+
+            @if (User.IsInRole("Administrator"))
+            {
+                <a asp-page="./Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn eps-btn-primary">
+
+                    Edit Record
+
+                </a>
+            }
+
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to AST Laboratory
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         STATUS BANNER
+    ======================================================= -->
+    @if (Model.IsLinked)
+    {
+        <div class="record-notice record-notice-neutral">
+
+            <strong>
+                Specimen linked to Questionnaire
+            </strong>
+
+            <span>
+                This AST record is linked to the questionnaire
+                record for specimen
+
+                <strong>
+                    @Display(
+                        Model.Record.SpecimenId
+                    )
+                </strong>.
+
+            </span>
+
+        </div>
+    }
+    else
+    {
+        <div class="record-notice record-notice-neutral">
+
+            <strong>
+                Specimen not linked
+            </strong>
+
+            <span>
+                This AST record is currently marked as
+
+                <strong>
+                    @Display(
+                        Model.Record.LinkageStatus
+                    )
+                </strong>
+
+                and may require reconciliation.
+
+            </span>
+
+        </div>
+    }
+
+
+    <!-- ======================================================
+         SECTION 01 — RECORD SUMMARY
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    RECORD SUMMARY
+                </div>
+
+                <h2>
+                    Laboratory Record
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Specimen ID
+                </span>
+
+                <strong class="identifier-text">
+
+                    @Display(
+                        Model.Record.SpecimenId
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    AST Record ID
+                </span>
+
+                <strong>
+
+                    @Model.Record.AstRecordId
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    LAN
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.Lan
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Site Code
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.SiteCode
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Month Collected
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.MonthCollected
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Participant Type
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.ParticipantType
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Linkage Status
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.LinkageStatus
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Created
+                </span>
+
+                <strong>
+
+                    @createdText
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Last Updated
+                </span>
+
+                <strong>
+
+                    @updatedText
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 02 — CLINICAL / TREATMENT CONTEXT
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    CLINICAL CONTEXT
+                </div>
+
+                <h2>
+                    Clinical & Treatment Information
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    GTD Status
+                </span>
+
+                <strong>
+                    @Display(
+                        Model.Record.GtdStatus
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Diarrhea Medication — Past 72 Hours
+                </span>
+
+                <strong>
+                    @Display(
+                        Model.Record.DiarrheaMedicationPast72h
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Medications — Past 72 Hours
+                </span>
+
+                <strong>
+                    @Display(
+                        Model.Record.MedicationsPast72h
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Illness Functional Impact
+                </span>
+
+                <strong>
+                    @Display(
+                        Model.Record.IllnessFunctionalImpact
+                    )
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Diagnostic Test
+                </span>
+
+                <strong>
+                    @Display(
+                        Model.Record.DiagnosticTest
+                    )
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 03 — ORGANISM IDENTIFICATION
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    LABORATORY IDENTIFICATION
+                </div>
+
+                <h2>
+                    Organism Identification
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="pathogen-view-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Bacterial Identification
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.BacterialIdentification
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Viral Identification
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.ViralIdentification
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Parasite Identification
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.ParasiteIdentification
+                    )
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 04 — RESISTANCE CLASSIFICATION
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    RESISTANCE CLASSIFICATION
+                </div>
+
+                <h2>
+                    MDR & ESBL
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    MDR Status
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.MdrStatus
+                    )
+
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    ESBL Status
+                </span>
+
+                <strong>
+
+                    @Display(
+                        Model.Record.EsblStatus
+                    )
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 05 — ANTIMICROBIAL RESULTS
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    ANTIMICROBIAL SUSCEPTIBILITY
+                </div>
+
+                <h2>
+                    MIC & Interpretation Results
+                </h2>
+
+                <p>
+                    Laboratory susceptibility results recorded
+                    for this isolate.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-subtable">
+
+            <div class="record-subtable-header">
+
+                <div>
+                    Antimicrobial
+                </div>
+
+                <div>
+                    MIC
+                </div>
+
+                <div>
+                    Interpretation
+                </div>
+
+            </div>
+
+
+            <!-- AMIKACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Amikacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmikacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmikacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- AMOXICILLIN / CLAVULANATE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Amoxicillin / Clavulanate
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmoxicillinClavulanateMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmoxicillinClavulanateInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- AMPICILLIN / SULBACTAM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ampicillin / Sulbactam
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmpicillinSulbactamMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmpicillinSulbactamInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- AMPICILLIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ampicillin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmpicillinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AmpicillinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- AZITHROMYCIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Azithromycin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AzithromycinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AzithromycinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- AZTREONAM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Aztreonam
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AztreonamMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.AztreonamInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFAZOLIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefazolin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefazolinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefazolinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFEPIME -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefepime
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefepimeMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefepimeInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFOTAXIME -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefotaxime
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotaximeMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotaximeInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFOTAXIME / CLAVULANATE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefotaxime / Clavulanate
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotaximeClavulanateMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotaximeClavulanateInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFOTETAN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefotetan
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotetanMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefotetanInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFOXITIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefoxitin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefoxitinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefoxitinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFTAZIDIME -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ceftazidime
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftazidimeMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftazidimeInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFTAZIDIME / CLAVULANATE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ceftazidime / Clavulanate
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftazidimeClavulanateMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftazidimeClavulanateInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFTOLOZANE / TAZOBACTAM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ceftolozane / Tazobactam
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftolozaneTazobactamMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftolozaneTazobactamInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFUROXIME -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cefuroxime
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefuroximeMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CefuroximeInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEPHALOTHIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Cephalothin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CephalothinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CephalothinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CEFTRIAXONE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ceftriaxone
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftriaxoneMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CeftriaxoneInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CHLORAMPHENICOL -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Chloramphenicol
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ChloramphenicolMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ChloramphenicolInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- CIPROFLOXACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ciprofloxacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CiprofloxacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.CiprofloxacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- COLISTIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Colistin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ColistinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ColistinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- ERTAPENEM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ertapenem
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ErtapenemMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ErtapenemInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- FOSFOMYCIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Fosfomycin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.FosfomycinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.FosfomycinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- GATIFLOXACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Gatifloxacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.GatifloxacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.GatifloxacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- GENTAMICIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Gentamicin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.GentamicinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.GentamicinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- IMIPENEM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Imipenem
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ImipenemMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.ImipenemInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- LEVOFLOXACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Levofloxacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.LevofloxacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.LevofloxacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- MEROPENEM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Meropenem
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.MeropenemMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.MeropenemInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- MOXIFLOXACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Moxifloxacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.MoxifloxacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.MoxifloxacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- NALIDIXIC ACID -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Nalidixic Acid
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NalidixicAcidMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NalidixicAcidInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- NITROFURANTOIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Nitrofurantoin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NitrofurantoinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NitrofurantoinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- NORFLOXACIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Norfloxacin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NorfloxacinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.NorfloxacinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- PIPERACILLIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Piperacillin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.PiperacillinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.PiperacillinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- PIPERACILLIN / TAZOBACTAM -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Piperacillin / Tazobactam
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.PiperacillinTazobactamMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.PiperacillinTazobactamInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- RIFAMPICIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Rifampicin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.RifampicinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.RifampicinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- TETRACYCLINE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Tetracycline
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TetracyclineMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TetracyclineInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- TIGECYCLINE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Tigecycline
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TigecyclineMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TigecyclineInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- TICARCILLIN / CLAVULANATE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Ticarcillin / Clavulanate
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TicarcillinClavulanateMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TicarcillinClavulanateInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- TOBRAMYCIN -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Tobramycin
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TobramycinMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TobramycinInt
+                    )
+                </div>
+
+            </div>
+
+
+            <!-- TRIMETHOPRIM / SULFAMETHOXAZOLE -->
+
+            <div class="record-subtable-row">
+
+                <div>
+                    Trimethoprim / Sulfamethoxazole
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TrimethoprimSulfamethoxazoleMic
+                    )
+                </div>
+
+                <div>
+                    @Display(
+                        Model.Record.TrimethoprimSulfamethoxazoleInt
+                    )
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 06 — QUESTIONNAIRE LINK
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SURVEILLANCE LINKAGE
+                </div>
+
+                <h2>
+                    Questionnaire Record
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.QuestionnaireRecord != null)
+        {
+            <div class="record-info-grid">
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Questionnaire ID
+                    </span>
+
+                    <strong>
+                        @Model.QuestionnaireRecord.QuestionnaireId
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Specimen ID
+                    </span>
+
+                    <strong class="identifier-text">
+
+                        @Display(
+                            Model.QuestionnaireRecord.SpecimenId
+                        )
+
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Site
+                    </span>
+
+                    <strong>
+
+                        @Display(
+                            Model.QuestionnaireRecord.SiteCode
+                        )
+
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        LAN
+                    </span>
+
+                    <strong>
+
+                        @Display(
+                            Model.QuestionnaireRecord.Lan
+                        )
+
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Bacterial Identification
+                    </span>
+
+                    <strong>
+
+                        @Display(
+                            Model.QuestionnaireRecord.BacterialIdentification
+                        )
+
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Viral Identification
+                    </span>
+
+                    <strong>
+
+                        @Display(
+                            Model.QuestionnaireRecord.ViralIdentification
+                        )
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div style="margin-top:18px;">
+
+                <a href="/Questionnaire/View/@Model.QuestionnaireRecord.QuestionnaireId"
+                   class="btn eps-btn-secondary">
+
+                    Open Questionnaire Record →
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No questionnaire record found
+                </strong>
+
+                <span>
+
+                    No questionnaire entry currently exists for
+                    specimen
+
+                    <strong>
+                        @Display(
+                            Model.Record.SpecimenId
+                        )
+                    </strong>.
+
+                    This AST record can therefore remain unlinked
+                    for reconciliation.
+
+                </span>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 07 — ADMINISTRATIVE AUDIT HISTORY
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    ADMINISTRATIVE AUDIT
+                </div>
+
+                <h2>
+                    Edit History
+                </h2>
+
+                <p>
+                    A read-only history of administrative corrections
+                    made to this AST record.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.AuditHistory.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No administrative edits
+                </strong>
+
+                <span>
+                    No correction history has been recorded
+                    for this AST record.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="record-subtable">
+
+                <div class="record-subtable-header">
+
+                    <div>
+                        Field
+                    </div>
+
+                    <div>
+                        Previous Value
+                    </div>
+
+                    <div>
+                        New Value
+                    </div>
+
+                </div>
+
+
+                @foreach (
+                    var audit
+                    in Model.AuditHistory)
+                {
+                    var auditChangedText =
+                        audit.ChangedAt
+                            .ToLocalTime()
+                            .ToString(
+                                "dd MMM yyyy HH:mm");
+
+
+                    <div class="record-subtable-row">
+
+                        <div>
+
+                            <strong>
+
+                                @(string.IsNullOrWhiteSpace(
+                                    audit.FieldName)
+                                    ? "Record"
+                                    : audit.FieldName)
+
+                            </strong>
+
+
+                            <div class="record-secondary"
+                                 style="margin-top:5px;">
+
+                                @auditChangedText
+
+                                <br />
+
+                                By:
+                                @audit.ChangedBy
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            white-space:normal;
+                            word-break:break-word;">
+
+                            @(string.IsNullOrWhiteSpace(
+                                audit.OldValue)
+                                ? "(blank)"
+                                : audit.OldValue)
+
+                        </div>
+
+
+                        <div style="
+                            white-space:normal;
+                            word-break:break-word;">
+
+                            @(string.IsNullOrWhiteSpace(
+                                audit.NewValue)
+                                ? "(blank)"
+                                : audit.NewValue)
+
+                        </div>
+
+                    </div>
+
+
+                    <div style="
+                        padding:10px 14px;
+                        border-bottom:1px solid var(--eps-border);
+                        background:var(--eps-panel-soft);">
+
+                        <div class="record-secondary">
+                            REASON FOR EDIT
+                        </div>
+
+                        <div style="
+                            margin-top:3px;
+                            font-size:11px;
+                            color:var(--eps-text);
+                            white-space:normal;
+                            word-break:break-word;">
+
+                            @(string.IsNullOrWhiteSpace(
+                                audit.Reason)
+                                ? "—"
+                                : audit.Reason)
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         FOOTER ACTIONS
+    ======================================================= -->
+
+    <div class="record-view-footer">
+
+        <a asp-page="./Index"
+           class="btn eps-btn-secondary">
+
+            ← Back to AST Laboratory
+
+        </a>
+
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <a asp-page="./Edit"
+               asp-route-id="@Model.Id"
+               class="btn eps-btn-primary">
+
+                Edit Record
+
+            </a>
+        }
+
+    </div>
+
+</div>

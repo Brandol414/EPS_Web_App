@@ -1,0 +1,157 @@
+﻿@page
+@model EPS_Web_App.Pages.Account.SetupModel
+
+@{
+    ViewData["Title"] = "Initial Administrator Setup";
+}
+
+<div class="account-page">
+
+    <div class="account-card">
+
+
+        <!-- ==================================================
+             ACCOUNT BRAND
+        =================================================== -->
+
+        <div class="account-brand">
+
+            <div class="account-brand-mark">
+
+                <img src="~/images/login.png"
+                     alt="Enteric surveillance"
+                     class="account-brand-image" />
+
+            </div>
+
+        </div>
+
+
+        <div class="module-eyebrow">
+            EPS ENTERIC SURVEILLANCE
+        </div>
+
+
+        <h1 class="account-title">
+            Initial Administrator Setup
+        </h1>
+
+
+        <p class="account-description">
+            Create the first administrator account for the
+            surveillance system.
+        </p>
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation-summary">
+        </div>
+
+
+        <form method="post">
+
+
+            <!-- ==================================================
+                 DISPLAY NAME
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.DisplayName">
+                    Display Name
+                </label>
+
+
+                <input asp-for="Input.DisplayName"
+                       class="form-control"
+                       autocomplete="name" />
+
+            </div>
+
+
+            <!-- ==================================================
+                 USERNAME
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.Username">
+                    Username
+                </label>
+
+
+                <input asp-for="Input.Username"
+                       class="form-control"
+                       autocomplete="username" />
+
+            </div>
+
+
+            <!-- ==================================================
+                 PASSWORD
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.Password">
+                    Password
+                </label>
+
+
+                <input asp-for="Input.Password"
+                       type="password"
+                       class="form-control"
+                       autocomplete="new-password" />
+
+
+                <div class="field-help">
+
+                    Use at least 8 characters and include
+                    uppercase, lowercase, number, and special
+                    character.
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 CONFIRM PASSWORD
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.ConfirmPassword">
+                    Confirm Password
+                </label>
+
+
+                <input asp-for="Input.ConfirmPassword"
+                       type="password"
+                       class="form-control"
+                       autocomplete="new-password" />
+
+            </div>
+
+
+            <!-- ==================================================
+                 CREATE ADMINISTRATOR
+            =================================================== -->
+
+            <button type="submit"
+                    class="btn eps-btn-primary account-submit">
+
+                <i class="bi bi-person-check-fill"
+                   aria-hidden="true"></i>
+
+                <span>
+                    Create Administrator
+                </span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

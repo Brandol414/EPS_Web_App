@@ -1,0 +1,3662 @@
+﻿@page
+@model global::EPS_Web_App.Pages.Questionnaire.CreateModel
+
+@{
+    ViewData["Title"] = "New Questionnaire";
+}
+
+<div class="questionnaire-create-page">
+
+    <div class="create-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                QUESTIONNAIRE DATA ENTRY
+            </div>
+
+            <h1 class="module-title">
+                New Surveillance Record
+            </h1>
+
+            <p class="module-description">
+                Complete the questionnaire in sequence.
+                Fields that do not apply will be hidden automatically.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+                ← Cancel
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div asp-validation-summary="ModelOnly"
+         class="validation-summary">
+    </div>
+
+
+    <form method="post"
+          id="questionnaireForm">
+
+        <!-- ==================================================
+             SECTION 01 — RECORD IDENTITY
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    01
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        IDENTIFICATION
+                    </div>
+
+                    <h2>
+                        Record Identity
+                    </h2>
+
+                    <p>
+                        Establish the surveillance record and core identifiers.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+                <div class="entry-field entry-field-wide">
+
+                    <label asp-for="Input.SpecimenId">
+                        Specimen ID
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <input asp-for="Input.SpecimenId"
+                           id="specimenId"
+                           class="form-control form-control-lg"
+                           placeholder="EPS1549-KCH-0001A"
+                           autocomplete="off" />
+
+                    <div class="field-help">
+                        Format: EPS1549-SITE-####A/B
+                    </div>
+
+                    <span asp-validation-for="Input.SpecimenId"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.SiteCode">
+                        Site Code
+                    </label>
+
+                    <input asp-for="Input.SiteCode"
+                           id="siteCode"
+                           class="form-control"
+                           readonly />
+
+                    <div class="field-help">
+                        Derived automatically from Specimen ID.
+                    </div>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Lan">
+                        LAN
+                    </label>
+
+                    <input asp-for="Input.Lan"
+                           class="form-control"
+                           placeholder="MHK#####"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="Input.Lan"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.IsolationDate">
+                        Isolation Date
+                    </label>
+
+                    <input asp-for="Input.IsolationDate"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 02 — PARTICIPANT
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    02
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        PARTICIPANT
+                    </div>
+
+                    <h2>
+                        Participant Information
+                    </h2>
+
+                    <p>
+                        Record demographic and participant details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-4">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Age">
+                        Age
+                    </label>
+
+                    <input asp-for="Input.Age"
+                           id="ageInput"
+                           class="form-control"
+                           placeholder="e.g. 2 years" />
+
+                    <div class="field-help">
+                        Used to determine the applicable clinical assessment.
+                    </div>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.DateOfBirth">
+                        Date of Birth
+                    </label>
+
+                    <input asp-for="Input.DateOfBirth"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Gender">
+                        Gender
+                    </label>
+
+                    <select asp-for="Input.Gender"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Residence">
+                        Residence
+                    </label>
+
+                    <input asp-for="Input.Residence"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Occupation">
+                        Occupation
+                    </label>
+
+                    <input asp-for="Input.Occupation"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Rank">
+                        Rank
+                    </label>
+
+                    <input asp-for="Input.Rank"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field entry-field-span-2">
+
+                    <label asp-for="Input.MainJob">
+                        Main Job
+                    </label>
+
+                    <input asp-for="Input.MainJob"
+                           class="form-control" />
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 03 — ROTAVIRUS / HIV
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    03
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        BACKGROUND
+                    </div>
+
+                    <h2>
+                        Rotavirus Vaccination & HIV Status
+                    </h2>
+
+                    <p>
+                        Record previous rotavirus vaccination and HIV status.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.RotavirusDose1Status">
+                        Rotavirus Dose 1 Status
+                    </label>
+
+                    <select asp-for="Input.RotavirusDose1Status"
+                            id="rotavirusDose1Status"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field"
+                     id="rotavirusDose1DateGroup">
+
+                    <label asp-for="Input.RotavirusDose1Date">
+                        Rotavirus Dose 1 Date
+                    </label>
+
+                    <input asp-for="Input.RotavirusDose1Date"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.RotavirusDose2Status">
+                        Rotavirus Dose 2 Status
+                    </label>
+
+                    <select asp-for="Input.RotavirusDose2Status"
+                            id="rotavirusDose2Status"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field"
+                     id="rotavirusDose2DateGroup">
+
+                    <label asp-for="Input.RotavirusDose2Date">
+                        Rotavirus Dose 2 Date
+                    </label>
+
+                    <input asp-for="Input.RotavirusDose2Date"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.OtherRotavirusVaccineStatus">
+                        Other Rotavirus Vaccine
+                    </label>
+
+                    <select asp-for="Input.OtherRotavirusVaccineStatus"
+                            id="otherRotavirusVaccineStatus"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field"
+                     id="otherRotavirusVaccineDateGroup">
+
+                    <label asp-for="Input.OtherRotavirusVaccineDate">
+                        Other Rotavirus Vaccine Date
+                    </label>
+
+                    <input asp-for="Input.OtherRotavirusVaccineDate"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.HivStatus">
+                        HIV Status
+                    </label>
+
+                    <select asp-for="Input.HivStatus"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="HIV negative">
+                            HIV negative
+                        </option>
+
+                        <option value="HIV positive">
+                            HIV positive
+                        </option>
+
+                        <option value="Unknown">
+                            Unknown
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 04 — SYMPTOM ONSET / DIARRHOEA
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    04
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        CLINICAL PRESENTATION
+                    </div>
+
+                    <h2>
+                        Symptom Onset & Diarrhoeal Illness
+                    </h2>
+
+                    <p>
+                        Establish the onset of illness and document the diarrhoeal presentation.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-4">
+
+                <div class="entry-field entry-field-span-2">
+
+                    <label asp-for="Input.FirstSymptom">
+                        First Symptom
+                    </label>
+
+                    <select asp-for="Input.FirstSymptom"
+                            id="firstSymptom"
+                            class="form-select">
+
+                        <option value="">
+                            Select first symptom
+                        </option>
+
+                        <option value="Diarrhea">
+                            Diarrhea
+                        </option>
+
+                        <option value="Fever">
+                            Fever
+                        </option>
+
+                        <option value="Vomiting">
+                            Vomiting
+                        </option>
+
+                        <option value="Abdominal cramps">
+                            Abdominal cramps
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.SymptomOnsetDate">
+                        Symptom Onset Date
+                    </label>
+
+                    <input asp-for="Input.SymptomOnsetDate"
+                           class="form-control"
+                           type="date" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.SymptomOnsetTime">
+                        Symptom Onset Time
+                    </label>
+
+                    <input asp-for="Input.SymptomOnsetTime"
+                           class="form-control"
+                           type="time" />
+
+                </div>
+
+
+                <div class="entry-field entry-field-span-2"
+                     id="diarrheaDurationGroup">
+
+                    <label asp-for="Input.DiarrheaDuration">
+                        Diarrhea Duration
+                    </label>
+
+                    <input asp-for="Input.DiarrheaDuration"
+                           class="form-control"
+                           placeholder="e.g. 2 days" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MaxLooseStools24h">
+                        Maximum Loose Stools — 24 Hours
+                    </label>
+
+                    <input asp-for="Input.MaxLooseStools24h"
+                           class="form-control"
+                           type="number"
+                           min="0" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.LooseStools8h">
+                        Loose Stools — 8 Hours
+                    </label>
+
+                    <input asp-for="Input.LooseStools8h"
+                           class="form-control"
+                           type="number"
+                           min="0" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.LooseStools24h">
+                        Loose Stools — 24 Hours
+                    </label>
+
+                    <input asp-for="Input.LooseStools24h"
+                           class="form-control"
+                           type="number"
+                           min="0" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MucousStool">
+                        Mucous Stool
+                    </label>
+
+                    <select asp-for="Input.MucousStool"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BloodyStool">
+                        Bloody Stool
+                    </label>
+
+                    <select asp-for="Input.BloodyStool"
+                            id="bloodyStool"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="entry-field"
+                     id="bloodyStoolDurationGroup">
+
+                    <label asp-for="Input.BloodyStoolDuration">
+                        Bloody Stool Duration
+                    </label>
+
+                    <input asp-for="Input.BloodyStoolDuration"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.RiceWaterStool">
+                        Rice-water Stool
+                    </label>
+
+                    <select asp-for="Input.RiceWaterStool"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 05 — ASSOCIATED SYMPTOMS
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    05
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        SYMPTOM ASSESSMENT
+                    </div>
+
+                    <h2>
+                        Associated Symptoms
+                    </h2>
+
+                    <p>
+                        Select Yes when a symptom is present.
+                        Additional fields appear automatically.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-dependent-grid">
+
+                <!-- ABDOMINAL CRAMPS -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.AbdominalCramps">
+                            Abdominal Cramps
+                        </label>
+
+                        <select asp-for="Input.AbdominalCramps"
+                                id="abdominalCramps"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="abdominalCrampsDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.AbdominalCrampsDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.AbdominalCrampsDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.AbdominalCrampsSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.AbdominalCrampsSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EXCESSIVE GAS -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.ExcessiveGas">
+                            Excessive Gas
+                        </label>
+
+                        <select asp-for="Input.ExcessiveGas"
+                                id="excessiveGas"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="excessiveGasDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.ExcessiveGasDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.ExcessiveGasDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.ExcessiveGasSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.ExcessiveGasSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NAUSEA -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Nausea">
+                            Nausea
+                        </label>
+
+                        <select asp-for="Input.Nausea"
+                                id="nausea"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="nauseaDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.NauseaDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.NauseaDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.NauseaSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.NauseaSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEVER -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Fever">
+                            Fever
+                        </label>
+
+                        <select asp-for="Input.Fever"
+                                id="fever"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="feverDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.FeverDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.FeverDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.FeverSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.FeverSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAINFUL STRAINING -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.PainfulStrainingStool">
+                            Painful Straining During Stool
+                        </label>
+
+                        <select asp-for="Input.PainfulStrainingStool"
+                                id="painfulStrainingStool"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="painfulStrainingDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.PainfulStrainingDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.PainfulStrainingDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.PainfulStrainingSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.PainfulStrainingSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MALAISE -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.MalaiseFatigue">
+                            Malaise / Fatigue
+                        </label>
+
+                        <select asp-for="Input.MalaiseFatigue"
+                                id="malaiseFatigue"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="malaiseFatigueDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.MalaiseFatigueDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.MalaiseFatigueDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.MalaiseFatigueSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.MalaiseFatigueSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VOMITING -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Vomiting">
+                            Vomiting
+                        </label>
+
+                        <select asp-for="Input.Vomiting"
+                                id="vomiting"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="vomitingDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.VomitingDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.VomitingDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.VomitingCount">
+                                Number of Vomits
+                            </label>
+
+                            <input asp-for="Input.VomitingCount"
+                                   class="form-control"
+                                   type="number"
+                                   min="0" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.VomitingSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.VomitingSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HEADACHE -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Headache">
+                            Headache
+                        </label>
+
+                        <select asp-for="Input.Headache"
+                                id="headache"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="headacheDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.HeadacheDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.HeadacheDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.HeadacheSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.HeadacheSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOSS OF APPETITE -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.LossOfAppetite">
+                            Loss of Appetite
+                        </label>
+
+                        <select asp-for="Input.LossOfAppetite"
+                                id="lossOfAppetite"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="lossOfAppetiteDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.LossOfAppetiteDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.LossOfAppetiteDuration"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LIGHTHEADEDNESS -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Lightheadedness">
+                            Lightheadedness
+                        </label>
+
+                        <select asp-for="Input.Lightheadedness"
+                                id="lightheadedness"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="lightheadednessDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.LightheadednessDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.LightheadednessDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.LightheadednessSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.LightheadednessSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STOOL URGENCY -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.StoolUrgency">
+                            Stool Urgency
+                        </label>
+
+                        <select asp-for="Input.StoolUrgency"
+                                id="stoolUrgency"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="stoolUrgencyDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.StoolUrgencyDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.StoolUrgencyDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.StoolUrgencySeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.StoolUrgencySeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MUSCLE ACHES -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.MuscleAches">
+                            Muscle Aches
+                        </label>
+
+                        <select asp-for="Input.MuscleAches"
+                                id="muscleAches"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="muscleAchesDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.MuscleAchesDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.MuscleAchesDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.MuscleAchesSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.MuscleAchesSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- JOINT ACHES -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.JointAches">
+                            Joint Aches
+                        </label>
+
+                        <select asp-for="Input.JointAches"
+                                id="jointAches"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="jointAchesDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.JointAchesDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.JointAchesDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.JointAchesSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.JointAchesSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FECAL INCONTINENCE -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.FecalIncontinence">
+                            Fecal Incontinence
+                        </label>
+
+                        <select asp-for="Input.FecalIncontinence"
+                                id="fecalIncontinence"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="fecalIncontinenceDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.FecalIncontinenceDuration">
+                                Duration
+                            </label>
+
+                            <input asp-for="Input.FecalIncontinenceDuration"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.FecalIncontinenceSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.FecalIncontinenceSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OTHER SYMPTOMS -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.OtherSymptoms">
+                            Other Symptoms
+                        </label>
+
+                        <select asp-for="Input.OtherSymptoms"
+                                id="otherSymptoms"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="otherSymptomsDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.OtherSymptomsSpecified">
+                                Specify
+                            </label>
+
+                            <input asp-for="Input.OtherSymptomsSpecified"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.OtherSymptomsSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.OtherSymptomsSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADDITIONAL SYMPTOMS -->
+
+                <div class="dependent-question">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.AdditionalSymptoms">
+                            Additional Symptoms
+                        </label>
+
+                        <select asp-for="Input.AdditionalSymptoms"
+                                id="additionalSymptoms"
+                                class="form-select">
+
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="additionalSymptomsDetails"
+                         class="dependent-details">
+
+                        <div class="entry-field">
+
+                            <label asp-for="Input.AdditionalSymptomsSeverity">
+                                Severity
+                            </label>
+
+                            <select asp-for="Input.AdditionalSymptomsSeverity"
+                                    class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 06 — CLINICAL ASSESSMENT
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    06
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        CLINICAL ASSESSMENT
+                    </div>
+
+                    <h2>
+                        Clinical Measurements
+                    </h2>
+
+                    <p>
+                        Record observed clinical status and physical measurements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-4">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.GeneralCondition">
+                        General Condition
+                    </label>
+
+                    <input asp-for="Input.GeneralCondition"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BodyTemperature">
+                        Body Temperature
+                    </label>
+
+                    <input asp-for="Input.BodyTemperature"
+                           class="form-control"
+                           placeholder="°C" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BodyWeight">
+                        Body Weight
+                    </label>
+
+                    <input asp-for="Input.BodyWeight"
+                           class="form-control"
+                           placeholder="kg" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Height">
+                        Height
+                    </label>
+
+                    <input asp-for="Input.Height"
+                           class="form-control"
+                           placeholder="cm" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BloodPressure">
+                        Blood Pressure
+                    </label>
+
+                    <input asp-for="Input.BloodPressure"
+                           class="form-control"
+                           placeholder="e.g. 120/80" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.RespiratoryRate">
+                        Respiratory Rate
+                    </label>
+
+                    <input asp-for="Input.RespiratoryRate"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MalnutritionStatus">
+                        Malnutrition Status
+                    </label>
+
+                    <select asp-for="Input.MalnutritionStatus"
+                            class="form-select">
+
+                        <option value="">Select</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div id="childAssessmentSection"
+                 class="entry-subsection clinical-dependent-section">
+
+                <div class="entry-subsection-title">
+                    Child Assessment
+                </div>
+
+
+                <div class="entry-grid entry-grid-3">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.ChildConsciousnessResponse">
+                            Consciousness Response
+                        </label>
+
+                        <input asp-for="Input.ChildConsciousnessResponse"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.ChildRestlessness">
+                            Restlessness
+                        </label>
+
+                        <select asp-for="Input.ChildRestlessness"
+                                class="form-select">
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                            <option value="No">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.ChildAssessment">
+                            Child Assessment
+                        </label>
+
+                        <input asp-for="Input.ChildAssessment"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.SkinPinchBack">
+                            Skin Pinch-back
+                        </label>
+
+                        <input asp-for="Input.SkinPinchBack"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.CapillaryRefill">
+                            Capillary Refill
+                        </label>
+
+                        <input asp-for="Input.CapillaryRefill"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.ChildDrinkingBreastfeeding">
+                            Drinking / Breastfeeding
+                        </label>
+
+                        <input asp-for="Input.ChildDrinkingBreastfeeding"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.Muac">
+                            MUAC
+                        </label>
+
+                        <input asp-for="Input.Muac"
+                               class="form-control"
+                               placeholder="cm" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="adultAssessmentSection"
+                 class="entry-subsection clinical-dependent-section">
+
+                <div class="entry-subsection-title">
+                    Adult Assessment
+                </div>
+
+
+                <div class="entry-grid entry-grid-3">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.AdultConsciousnessResponse">
+                            Consciousness Response
+                        </label>
+
+                        <input asp-for="Input.AdultConsciousnessResponse"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.PatientClinicalState">
+                            Patient Clinical State
+                        </label>
+
+                        <input asp-for="Input.PatientClinicalState"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.IllnessFunctionalImpact">
+                            Illness Functional Impact
+                        </label>
+
+                        <input asp-for="Input.IllnessFunctionalImpact"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="assessmentGroupNotice"
+                 class="clinical-assessment-notice">
+
+                Enter age to determine the applicable assessment.
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 07 — TREATMENT / MANAGEMENT
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    07
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        MANAGEMENT
+                    </div>
+
+                    <h2>
+                        Treatment & Management
+                    </h2>
+
+                    <p>
+                        Record the care pathway and treatment provided.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Admitted">
+                        Patient Admitted
+                    </label>
+
+                    <select asp-for="Input.Admitted"
+                            id="admitted"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="No">
+                            No — Outpatient
+                        </option>
+
+                        <option value="Yes">
+                            Yes — Admitted
+                        </option>
+
+                    </select>
+
+                    <div class="field-help">
+                        Select the patient's care pathway.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OUTPATIENT PATHWAY -->
+
+            <div id="outpatientTreatmentSection"
+                 class="entry-subsection">
+
+                <div class="entry-subsection-title">
+                    Outpatient Treatment
+                </div>
+
+
+                <div class="entry-grid entry-grid-2">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.OutpatientTreatment">
+                            Outpatient Treatment
+                        </label>
+
+                        <textarea asp-for="Input.OutpatientTreatment"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Record outpatient treatment...">
+                        </textarea>
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.TreatmentGiven">
+                            Treatment Given
+                        </label>
+
+                        <textarea asp-for="Input.TreatmentGiven"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Record treatment given...">
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMITTED PATHWAY -->
+
+            <div id="admittedTreatmentSection"
+                 class="entry-subsection">
+
+                <div class="entry-subsection-title">
+                    Admission & Treatment
+                </div>
+
+
+                <div class="entry-grid entry-grid-2">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.AdmissionDate">
+                            Date of Admission
+                        </label>
+
+                        <input asp-for="Input.AdmissionDate"
+                               class="form-control"
+                               type="date" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.AdmissionTime">
+                            Time of Admission
+                        </label>
+
+                        <input asp-for="Input.AdmissionTime"
+                               class="form-control"
+                               type="time" />
+
+                    </div>
+
+                </div>
+
+
+                <div class="entry-grid entry-grid-3">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.OralRehydration">
+                            Oral Rehydration
+                        </label>
+
+                        <select asp-for="Input.OralRehydration"
+                                class="form-select">
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                            <option value="No">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.IvRehydration">
+                            IV Rehydration
+                        </label>
+
+                        <select asp-for="Input.IvRehydration"
+                                class="form-select">
+
+                            <option value="">
+                                Select
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                            <option value="No">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.OtherTreatment">
+                            Other Treatment
+                        </label>
+
+                        <textarea asp-for="Input.OtherTreatment"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Record treatment given to the admitted patient...">
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 08 — DISPOSITION / OUTCOME
+        =================================================== -->
+
+        <section id="dispositionSection"
+                 class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    08
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        OUTCOME
+                    </div>
+
+                    <h2>
+                        Disposition & Outcome
+                    </h2>
+
+                    <p>
+                        Record the outcome of an admitted patient.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Disposition">
+                        Disposition
+                    </label>
+
+                    <select asp-for="Input.Disposition"
+                            id="disposition"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Discharged">
+                            Discharged
+                        </option>
+
+                        <option value="Absconded">
+                            Absconded
+                        </option>
+
+                        <option value="Death">
+                            Death
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div id="dispositionDetails"
+                 class="entry-subsection">
+
+                <div class="entry-subsection-title">
+                    Outcome Details
+                </div>
+
+
+                <div class="entry-grid entry-grid-3">
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.DispositionDate">
+                            Disposition Date
+                        </label>
+
+                        <input asp-for="Input.DispositionDate"
+                               class="form-control"
+                               type="date" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.DispositionTime">
+                            Disposition Time
+                        </label>
+
+                        <input asp-for="Input.DispositionTime"
+                               class="form-control"
+                               type="time" />
+
+                    </div>
+
+
+                    <div class="entry-field">
+
+                        <label asp-for="Input.DischargeDeathDiagnosis">
+                            Discharge / Death Diagnosis
+                        </label>
+
+                        <textarea asp-for="Input.DischargeDeathDiagnosis"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter discharge or death diagnosis...">
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 09 — LABORATORY IDENTIFICATION
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    09
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        LABORATORY
+                    </div>
+
+                    <h2>
+                        Laboratory Identification
+                    </h2>
+
+                    <p>
+                        Record the laboratory organism or result identified for the specimen.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-2">
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BacterialIdentification">
+                        Bacterial Identification
+                    </label>
+
+                    <textarea asp-for="Input.BacterialIdentification"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Enter identified bacterial organism(s)...">
+                    </textarea>
+
+                    <div class="field-help">
+                        Preserve the laboratory result as reported.
+                    </div>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ViralIdentification">
+                        Viral Identification
+                    </label>
+
+                    <textarea asp-for="Input.ViralIdentification"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Enter identified viral organism(s)...">
+                    </textarea>
+
+                    <div class="field-help">
+                        Preserve the laboratory result as reported.
+                    </div>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ParasiteIdentification">
+                        Parasite Identification
+                    </label>
+
+                    <textarea asp-for="Input.ParasiteIdentification"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Enter identified parasite organism(s)...">
+                    </textarea>
+
+                    <div class="field-help">
+                        Preserve morphology and organism details where reported.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 10 — WATER SOURCE / TREATMENT
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    10
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        WATER & HYGIENE
+                    </div>
+
+                    <h2>
+                        Water Source & Treatment
+                    </h2>
+
+                    <p>
+                        Select all applicable water sources and treatment methods.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- WATER SOURCE -->
+
+            <div class="entry-subsection">
+
+                <div class="entry-subsection-title">
+                    Water Source
+                </div>
+
+
+                <div class="entry-field">
+
+                    <div class="water-checkbox-grid">
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Municipal / Tap Water" />
+
+                            <span>
+                                Municipal / Tap Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Borehole" />
+
+                            <span>
+                                Borehole
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Well" />
+
+                            <span>
+                                Well
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="River" />
+
+                            <span>
+                                River
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Rain Water" />
+
+                            <span>
+                                Rain Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Spring" />
+
+                            <span>
+                                Spring
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Lake" />
+
+                            <span>
+                                Lake
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Swamp" />
+
+                            <span>
+                                Swamp
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Pond" />
+
+                            <span>
+                                Pond
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Stream" />
+
+                            <span>
+                                Stream
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Dam" />
+
+                            <span>
+                                Dam
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Bottled Water" />
+
+                            <span>
+                                Bottled Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Mineral Water" />
+
+                            <span>
+                                Mineral Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterSourceSelections"
+                                   value="Distilled Water" />
+
+                            <span>
+                                Distilled Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   id="otherWaterSourceCheck"
+                                   name="Input.WaterSourceSelections"
+                                   value="Other" />
+
+                            <span>
+                                Other
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div id="otherWaterSourceGroup"
+                         class="water-other-field">
+
+                        <label asp-for="Input.OtherWaterSource">
+                            Specify Other Water Source
+                        </label>
+
+                        <input asp-for="Input.OtherWaterSource"
+                               id="otherWaterSource"
+                               class="form-control"
+                               placeholder="Enter the specific water source..." />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- WATER TREATMENT -->
+
+            <div class="entry-subsection">
+
+                <div class="entry-subsection-title">
+                    Water Treatment
+                </div>
+
+
+                <div class="entry-field">
+
+                    <div class="water-checkbox-grid">
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Boiling" />
+
+                            <span>
+                                Boiling
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Chlorination (Water Guard / Aquatab)" />
+
+                            <span>
+                                Chlorination (Water Guard / Aquatab)
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Filtration" />
+
+                            <span>
+                                Filtration
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Chemical Treatment" />
+
+                            <span>
+                                Chemical Treatment
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Distillation" />
+
+                            <span>
+                                Distillation
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Purification" />
+
+                            <span>
+                                Purification
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Reverse Osmosis" />
+
+                            <span>
+                                Reverse Osmosis
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Bottled Water" />
+
+                            <span>
+                                Bottled Water
+                            </span>
+
+                        </label>
+
+
+                        <label class="water-checkbox-item">
+
+                            <input type="checkbox"
+                                   id="otherWaterTreatmentCheck"
+                                   name="Input.WaterTreatmentSelections"
+                                   value="Other" />
+
+                            <span>
+                                Other
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div id="otherWaterTreatmentGroup"
+                         class="water-other-field">
+
+                        <label asp-for="Input.OtherWaterTreatment">
+                            Specify Other Water Treatment
+                        </label>
+
+                        <input asp-for="Input.OtherWaterTreatment"
+                               id="otherWaterTreatment"
+                               class="form-control"
+                               placeholder="Enter the specific water treatment..." />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACTIONS
+        =================================================== -->
+
+        <div class="create-form-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+                Cancel
+            </a>
+
+
+            <button type="submit"
+                    class="btn eps-btn-primary">
+                Save Questionnaire Record
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                // =================================================
+                // SPECIMEN ID → SITE CODE
+                // =================================================
+
+                const specimenId =
+                    document.getElementById(
+                        "specimenId"
+                    );
+
+                const siteCode =
+                    document.getElementById(
+                        "siteCode"
+                    );
+
+
+                function updateSiteCode() {
+
+                    const value =
+                        specimenId?.value
+                            .trim()
+                            .toUpperCase();
+
+
+                    if (!value || !siteCode) {
+                        return;
+                    }
+
+
+                    const parts =
+                        value.split("-");
+
+
+                    if (parts.length === 3) {
+
+                        siteCode.value =
+                            parts[1];
+
+                    }
+
+                }
+
+
+                specimenId?.addEventListener(
+                    "input",
+                    updateSiteCode
+                );
+
+
+                // =================================================
+                // DIARRHEA DURATION
+                // =================================================
+
+                const firstSymptom =
+                    document.getElementById(
+                        "firstSymptom"
+                    );
+
+                const diarrheaDurationGroup =
+                    document.getElementById(
+                        "diarrheaDurationGroup"
+                    );
+
+
+                function updateDiarrheaDuration() {
+
+                    if (!diarrheaDurationGroup) {
+                        return;
+                    }
+
+
+                    diarrheaDurationGroup.style.display =
+                        firstSymptom?.value === "Diarrhea"
+                            ? ""
+                            : "none";
+
+                }
+
+
+                firstSymptom?.addEventListener(
+                    "change",
+                    updateDiarrheaDuration
+                );
+
+
+                // =================================================
+                // BLOODY STOOL
+                // =================================================
+
+                const bloodyStool =
+                    document.getElementById(
+                        "bloodyStool"
+                    );
+
+                const bloodyStoolDurationGroup =
+                    document.getElementById(
+                        "bloodyStoolDurationGroup"
+                    );
+
+
+                function updateBloodyStoolDuration() {
+
+                    if (!bloodyStoolDurationGroup) {
+                        return;
+                    }
+
+
+                    bloodyStoolDurationGroup.style.display =
+                        bloodyStool?.value === "Yes"
+                            ? ""
+                            : "none";
+
+                }
+
+
+                bloodyStool?.addEventListener(
+                    "change",
+                    updateBloodyStoolDuration
+                );
+
+
+                // =================================================
+                // ROTAVIRUS DATE DEPENDENCIES
+                // =================================================
+
+                function configureDateDependency(
+                    selectId,
+                    groupId
+                ) {
+
+                    const select =
+                        document.getElementById(
+                            selectId
+                        );
+
+                    const group =
+                        document.getElementById(
+                            groupId
+                        );
+
+
+                    function update() {
+
+                        if (!group) {
+                            return;
+                        }
+
+
+                        group.style.display =
+                            select?.value === "Yes"
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    select?.addEventListener(
+                        "change",
+                        update
+                    );
+
+
+                    update();
+
+                }
+
+
+                configureDateDependency(
+                    "rotavirusDose1Status",
+                    "rotavirusDose1DateGroup"
+                );
+
+
+                configureDateDependency(
+                    "rotavirusDose2Status",
+                    "rotavirusDose2DateGroup"
+                );
+
+
+                configureDateDependency(
+                    "otherRotavirusVaccineStatus",
+                    "otherRotavirusVaccineDateGroup"
+                );
+
+
+                // =================================================
+                // GENERIC SYMPTOM DEPENDENCY
+                // =================================================
+
+                function configureSymptom(
+                    selectId,
+                    detailsId
+                ) {
+
+                    const select =
+                        document.getElementById(
+                            selectId
+                        );
+
+                    const details =
+                        document.getElementById(
+                            detailsId
+                        );
+
+
+                    if (!select || !details) {
+                        return;
+                    }
+
+
+                    function update() {
+
+                        details.style.display =
+                            select.value === "Yes"
+                                ? "grid"
+                                : "none";
+
+                    }
+
+
+                    select.addEventListener(
+                        "change",
+                        update
+                    );
+
+
+                    update();
+
+                }
+
+
+                configureSymptom(
+                    "abdominalCramps",
+                    "abdominalCrampsDetails"
+                );
+
+                configureSymptom(
+                    "excessiveGas",
+                    "excessiveGasDetails"
+                );
+
+                configureSymptom(
+                    "nausea",
+                    "nauseaDetails"
+                );
+
+                configureSymptom(
+                    "fever",
+                    "feverDetails"
+                );
+
+                configureSymptom(
+                    "painfulStrainingStool",
+                    "painfulStrainingDetails"
+                );
+
+                configureSymptom(
+                    "malaiseFatigue",
+                    "malaiseFatigueDetails"
+                );
+
+                configureSymptom(
+                    "vomiting",
+                    "vomitingDetails"
+                );
+
+                configureSymptom(
+                    "headache",
+                    "headacheDetails"
+                );
+
+                configureSymptom(
+                    "lossOfAppetite",
+                    "lossOfAppetiteDetails"
+                );
+
+                configureSymptom(
+                    "lightheadedness",
+                    "lightheadednessDetails"
+                );
+
+                configureSymptom(
+                    "stoolUrgency",
+                    "stoolUrgencyDetails"
+                );
+
+                configureSymptom(
+                    "muscleAches",
+                    "muscleAchesDetails"
+                );
+
+                configureSymptom(
+                    "jointAches",
+                    "jointAchesDetails"
+                );
+
+                configureSymptom(
+                    "fecalIncontinence",
+                    "fecalIncontinenceDetails"
+                );
+
+                configureSymptom(
+                    "otherSymptoms",
+                    "otherSymptomsDetails"
+                );
+
+                configureSymptom(
+                    "additionalSymptoms",
+                    "additionalSymptomsDetails"
+                );
+
+
+                // =================================================
+                // CHILD / ADULT ASSESSMENT
+                // =================================================
+
+                const ageInput =
+                    document.getElementById(
+                        "ageInput"
+                    );
+
+                const childSection =
+                    document.getElementById(
+                        "childAssessmentSection"
+                    );
+
+                const adultSection =
+                    document.getElementById(
+                        "adultAssessmentSection"
+                    );
+
+                const assessmentNotice =
+                    document.getElementById(
+                        "assessmentGroupNotice"
+                    );
+
+
+                function determineAssessmentGroup(
+                    value
+                ) {
+
+                    if (!value) {
+                        return "unknown";
+                    }
+
+
+                    const age =
+                        value
+                            .trim()
+                            .toLowerCase();
+
+
+                    if (
+                        age.includes("child") ||
+                        age.includes("infant") ||
+                        age.includes("baby")
+                    ) {
+
+                        return "child";
+
+                    }
+
+
+                    if (age.includes("adult")) {
+
+                        return "adult";
+
+                    }
+
+
+                    if (
+                        age.includes("month") ||
+                        age.includes("week") ||
+                        age.includes("day")
+                    ) {
+
+                        return "child";
+
+                    }
+
+
+                    const match =
+                        age.match(
+                            /(\d+(\.\d+)?)/
+                        );
+
+
+                    if (!match) {
+                        return "unknown";
+                    }
+
+
+                    const numericAge =
+                        parseFloat(
+                            match[1]
+                        );
+
+
+                    if (
+                        age.includes("year") ||
+                        age.includes("yr") ||
+                        age.includes("yrs")
+                    ) {
+
+                        return numericAge < 18
+                            ? "child"
+                            : "adult";
+
+                    }
+
+
+                    return numericAge < 18
+                        ? "child"
+                        : "adult";
+
+                }
+
+
+                function updateAssessmentGroup() {
+
+                    const group =
+                        determineAssessmentGroup(
+                            ageInput?.value
+                        );
+
+
+                    if (childSection) {
+
+                        childSection.style.display =
+                            group === "child"
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (adultSection) {
+
+                        adultSection.style.display =
+                            group === "adult"
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (assessmentNotice) {
+
+                        if (group === "child") {
+
+                            assessmentNotice.textContent =
+                                "Child assessment fields are active.";
+
+                        }
+                        else if (group === "adult") {
+
+                            assessmentNotice.textContent =
+                                "Adult assessment fields are active.";
+
+                        }
+                        else {
+
+                            assessmentNotice.textContent =
+                                "Enter age in a recognizable format such as 1yr, 6 months, or 25 years.";
+
+                        }
+
+                    }
+
+                }
+
+
+                ageInput?.addEventListener(
+                    "input",
+                    updateAssessmentGroup
+                );
+
+
+                // =================================================
+                // TREATMENT / ADMISSION PATHWAY
+                // =================================================
+
+                const admitted =
+                    document.getElementById(
+                        "admitted"
+                    );
+
+                const outpatientTreatmentSection =
+                    document.getElementById(
+                        "outpatientTreatmentSection"
+                    );
+
+                const admittedTreatmentSection =
+                    document.getElementById(
+                        "admittedTreatmentSection"
+                    );
+
+                const dispositionSection =
+                    document.getElementById(
+                        "dispositionSection"
+                    );
+
+
+                function updateTreatmentPathway() {
+
+                    const value =
+                        admitted?.value;
+
+
+                    const isOutpatient =
+                        value === "No";
+
+
+                    const isAdmitted =
+                        value === "Yes";
+
+
+                    if (outpatientTreatmentSection) {
+
+                        outpatientTreatmentSection.style.display =
+                            isOutpatient
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (admittedTreatmentSection) {
+
+                        admittedTreatmentSection.style.display =
+                            isAdmitted
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (dispositionSection) {
+
+                        dispositionSection.style.display =
+                            isAdmitted
+                                ? ""
+                                : "none";
+
+                    }
+
+                }
+
+
+                admitted?.addEventListener(
+                    "change",
+                    updateTreatmentPathway
+                );
+
+
+                // =================================================
+                // DISPOSITION DETAILS
+                // =================================================
+
+                const disposition =
+                    document.getElementById(
+                        "disposition"
+                    );
+
+                const dispositionDetails =
+                    document.getElementById(
+                        "dispositionDetails"
+                    );
+
+
+                function updateDispositionDetails() {
+
+                    if (!dispositionDetails) {
+                        return;
+                    }
+
+
+                    dispositionDetails.style.display =
+                        disposition?.value
+                            ? ""
+                            : "none";
+
+                }
+
+
+                disposition?.addEventListener(
+                    "change",
+                    updateDispositionDetails
+                );
+
+
+                // =================================================
+                // OTHER WATER SOURCE
+                // =================================================
+
+                const otherWaterSourceCheck =
+                    document.getElementById(
+                        "otherWaterSourceCheck"
+                    );
+
+                const otherWaterSourceGroup =
+                    document.getElementById(
+                        "otherWaterSourceGroup"
+                    );
+
+                const otherWaterSource =
+                    document.getElementById(
+                        "otherWaterSource"
+                    );
+
+
+                function updateOtherWaterSource() {
+
+                    const checked =
+                        otherWaterSourceCheck?.checked === true;
+
+
+                    if (otherWaterSourceGroup) {
+
+                        otherWaterSourceGroup.style.display =
+                            checked
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (
+                        !checked &&
+                        otherWaterSource
+                    ) {
+
+                        otherWaterSource.value =
+                            "";
+
+                    }
+
+                }
+
+
+                otherWaterSourceCheck?.addEventListener(
+                    "change",
+                    updateOtherWaterSource
+                );
+
+
+                // =================================================
+                // OTHER WATER TREATMENT
+                // =================================================
+
+                const otherWaterTreatmentCheck =
+                    document.getElementById(
+                        "otherWaterTreatmentCheck"
+                    );
+
+                const otherWaterTreatmentGroup =
+                    document.getElementById(
+                        "otherWaterTreatmentGroup"
+                    );
+
+                const otherWaterTreatment =
+                    document.getElementById(
+                        "otherWaterTreatment"
+                    );
+
+
+                function updateOtherWaterTreatment() {
+
+                    const checked =
+                        otherWaterTreatmentCheck?.checked === true;
+
+
+                    if (otherWaterTreatmentGroup) {
+
+                        otherWaterTreatmentGroup.style.display =
+                            checked
+                                ? ""
+                                : "none";
+
+                    }
+
+
+                    if (
+                        !checked &&
+                        otherWaterTreatment
+                    ) {
+
+                        otherWaterTreatment.value =
+                            "";
+
+                    }
+
+                }
+
+
+                otherWaterTreatmentCheck?.addEventListener(
+                    "change",
+                    updateOtherWaterTreatment
+                );
+
+
+                // =================================================
+                // INITIAL STATE
+                // =================================================
+
+                updateSiteCode();
+
+                updateDiarrheaDuration();
+
+                updateBloodyStoolDuration();
+
+                updateAssessmentGroup();
+
+                updateTreatmentPathway();
+
+                updateDispositionDetails();
+
+                updateOtherWaterSource();
+
+                updateOtherWaterTreatment();
+
+            }
+        );
+
+    </script>
+
+}

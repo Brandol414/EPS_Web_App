@@ -1,0 +1,830 @@
+﻿@using EPS_Web_App.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext DbContext
+
+@{
+    var currentPath =
+        Context.Request.Path.Value ?? string.Empty;
+
+
+
+    // =========================================================
+    // RECONCILIATION SIDEBAR COUNT
+    //
+    // Included:
+    //   Open
+    //   Under Review
+    //   Deferred
+    //
+    // Excluded:
+    //   Resolved
+    //   Not an Error
+    // =========================================================
+
+    var openReconciliationCount =
+        await DbContext.ReconciliationAlerts
+            .AsNoTracking()
+            .CountAsync(
+                x =>
+                    x.Status == "Open"
+                    ||
+                    x.Status == "Under Review"
+                    ||
+                    x.Status == "Deferred"
+            );
+
+
+
+    // =========================================================
+    // ACTIVE NAVIGATION
+    // =========================================================
+
+    bool IsActive(params string[] paths)
+    {
+        foreach (var path in paths)
+        {
+            if (
+                currentPath.Equals(
+                    path,
+                    StringComparison.OrdinalIgnoreCase
+                )
+                ||
+                currentPath.StartsWith(
+                    path + "/",
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    var dashboardActive =
+        currentPath.Equals(
+            "/",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+
+
+    var questionnaireActive =
+        IsActive(
+            "/Questionnaire"
+        );
+
+
+
+    var astActive =
+        IsActive(
+            "/AST"
+        );
+
+
+
+    var reconciliationActive =
+        IsActive(
+            "/Reconciliation"
+        );
+
+
+
+    var administrationActive =
+        IsActive(
+            "/Administration"
+        );
+
+
+
+    // =========================================================
+    // AUTHENTICATION STATE
+    // =========================================================
+
+    var isAuthenticated =
+        User.Identity?.IsAuthenticated == true;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - EPS Enteric Surveillance
+    </title>
+
+
+
+    <!-- ======================================================
+         FAVICON
+    ======================================================= -->
+
+    <link rel="icon"
+          type="image/png"
+          href="~/images/favicon.png" />
+
+
+
+    <!-- ======================================================
+         BOOTSTRAP
+    ======================================================= -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+
+    <!-- ======================================================
+         BOOTSTRAP ICONS
+    ======================================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+
+    <!-- ======================================================
+         EPS APPLICATION STYLES
+    ======================================================= -->
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+
+
+    <link rel="stylesheet"
+          href="~/EPS_Web_App.styles.css"
+          asp-append-version="true" />
+
+</head>
+
+
+
+<body>
+
+    <div class="eps-app-shell">
+
+
+
+        <!-- ==================================================
+             SIDEBAR
+        =================================================== -->
+
+        <aside class="eps-sidebar">
+
+
+
+            <!-- ==================================================
+                 BRAND
+            =================================================== -->
+
+            <div class="eps-brand">
+
+                <div class="eps-brand-mark">
+
+                    <img src="~/images/gi-infection.png"
+                         alt="Gastrointestinal infection illustration"
+                         class="eps-brand-image" />
+
+                </div>
+
+
+
+                <div class="eps-brand-text">
+
+                    <div class="eps-brand-title">
+                        Enteric Surveillance
+                    </div>
+
+
+
+                    <div class="eps-brand-subtitle">
+                        Data Management System
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 NAVIGATION
+            =================================================== -->
+
+            <nav class="eps-navigation">
+
+
+
+                <!-- =================================================
+                     MAIN
+                ================================================== -->
+
+                <div class="eps-nav-section-title">
+                    MAIN
+                </div>
+
+
+
+                <!-- =================================================
+                     DASHBOARD
+                ================================================== -->
+
+                <a class="
+                    eps-nav-link
+                    @(dashboardActive ? "is-active" : "")"
+                   asp-page="/Index">
+
+                    <span class="eps-nav-icon"
+                          aria-hidden="true">
+
+                        <i class="bi bi-grid-1x2-fill"></i>
+
+                    </span>
+
+
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     QUESTIONNAIRE
+                ================================================== -->
+
+                <a class="
+                    eps-nav-link
+                    @(questionnaireActive ? "is-active" : "")"
+                   asp-page="/Questionnaire/Index">
+
+                    <span class="eps-nav-icon"
+                          aria-hidden="true">
+
+                        <i class="bi bi-file-earmark-medical-fill"></i>
+
+                    </span>
+
+
+
+                    <span>
+                        Questionnaire
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     AST LABORATORY
+                ================================================== -->
+
+                <a class="
+                    eps-nav-link
+                    @(astActive ? "is-active" : "")"
+                   asp-page="/AST/Index">
+
+                    <span class="eps-nav-icon"
+                          aria-hidden="true">
+
+                        <i class="bi bi-activity"></i>
+
+                    </span>
+
+
+
+                    <span>
+                        AST Laboratory
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     DATA QUALITY
+                ================================================== -->
+
+                <div class="eps-nav-section-title mt-4">
+                    DATA QUALITY
+                </div>
+
+
+
+                <!-- =================================================
+                     RECONCILIATION
+                ================================================== -->
+
+                <a class="
+                    eps-nav-link
+                    @(reconciliationActive ? "is-active" : "")"
+                   asp-page="/Reconciliation/Index">
+
+                    <span class="eps-nav-icon"
+                          aria-hidden="true">
+
+                        <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                    </span>
+
+
+
+                    <span>
+                        Reconciliation
+                    </span>
+
+
+
+                    @if (openReconciliationCount > 0)
+                    {
+                        <span class="
+                            eps-nav-badge
+                            eps-nav-badge-open">
+
+                            @openReconciliationCount
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="eps-nav-badge">
+
+                            0
+
+                        </span>
+                    }
+
+                </a>
+
+
+
+                <!-- =================================================
+                     ADMINISTRATION
+                ================================================== -->
+
+                <div class="eps-nav-section-title mt-4">
+                    ADMINISTRATION
+                </div>
+
+
+
+                <!-- =================================================
+                     ADMINISTRATION
+                ================================================== -->
+
+                <a class="
+                    eps-nav-link
+                    @(administrationActive ? "is-active" : "")"
+                   asp-page="/Administration/Index">
+
+                    <span class="eps-nav-icon"
+                          aria-hidden="true">
+
+                        <i class="bi bi-gear-fill"></i>
+
+                    </span>
+
+
+
+                    <span>
+                        Administration
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+
+            <!-- ==================================================
+                 SIDEBAR FOOTER
+            =================================================== -->
+
+            <div class="eps-sidebar-footer">
+
+
+
+                <div class="eps-system-status">
+
+                    <span class="eps-status-dot"></span>
+
+
+
+                    <span>
+                        System Online
+                    </span>
+
+                </div>
+
+
+
+                <div class="eps-sidebar-footer-text">
+                    EPS Surveillance Platform
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- ==================================================
+             MAIN AREA
+        =================================================== -->
+
+        <div class="eps-main-area">
+
+
+
+            <!-- ==================================================
+                 TOP BAR
+            =================================================== -->
+
+            <header class="eps-topbar">
+
+
+
+                <div class="eps-topbar-left">
+
+
+
+                    <button class="eps-mobile-toggle"
+                            type="button"
+                            id="epsSidebarToggle"
+                            aria-label="Toggle navigation">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+
+
+                    <div>
+
+                        <div class="eps-page-context">
+                            EPS ENTERIC SURVEILLANCE
+                        </div>
+
+
+
+                        <div class="eps-page-title">
+                            @ViewData["Title"]
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="eps-topbar-right">
+
+
+
+                    <!-- ==================================================
+                         SQL STATUS
+                    =================================================== -->
+
+                    <div class="eps-topbar-status">
+
+                        <span class="eps-status-dot"></span>
+
+
+
+                        <i class="bi bi-database-check"
+                           aria-hidden="true"></i>
+
+
+
+                        SQL Connected
+
+                    </div>
+
+
+
+                    <!-- ==================================================
+                         AUTHENTICATED USER
+                    ================================================== -->
+
+                    @if (isAuthenticated)
+                    {
+                        <div class="eps-user-menu">
+
+
+
+                            <div class="eps-user-avatar"
+                                 aria-hidden="true">
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+
+
+                            <div class="eps-user-details">
+
+
+
+                                <div class="eps-user-name">
+
+                                    @(User.Identity?.Name
+                                        ?? "Administrator")
+
+                                </div>
+
+
+
+                                <div class="eps-user-role">
+
+                                    System Administrator
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- ==================================================
+                                 LOGOUT
+                            =================================================== -->
+
+                            <form method="post"
+                                  asp-page="/Account/Logout"
+                                  id="epsLogoutForm"
+                                  style="margin:0;">
+
+                                <button type="submit"
+                                        class="btn eps-btn-secondary"
+                                        style="
+                                            margin-left:12px;
+                                            white-space:nowrap;
+                                        ">
+
+                                    <i class="bi bi-box-arrow-right"
+                                       aria-hidden="true"></i>
+
+
+
+                                    <span>
+                                        Logout
+                                    </span>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+                    }
+
+                </div>
+
+            </header>
+
+
+
+            <!-- ==================================================
+                 PAGE CONTENT
+            =================================================== -->
+
+            <main class="eps-content">
+
+                @RenderBody()
+
+            </main>
+
+
+
+            <!-- ==================================================
+                 FOOTER
+            =================================================== -->
+
+            <footer class="eps-footer">
+
+                <div>
+                    EPS Enteric Surveillance
+                </div>
+
+
+
+                <div>
+
+                    <i class="bi bi-shield-check"
+                       aria-hidden="true"></i>
+
+                    &copy; 2026
+
+                </div>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ======================================================
+         JAVASCRIPT
+    ======================================================= -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+
+                // =================================================
+                // MOBILE SIDEBAR
+                // =================================================
+
+                const toggle =
+                    document.getElementById(
+                        "epsSidebarToggle"
+                    );
+
+
+
+                const shell =
+                    document.querySelector(
+                        ".eps-app-shell"
+                    );
+
+
+
+                if (toggle && shell) {
+
+                    toggle.addEventListener(
+                        "click",
+                        function () {
+
+                            shell.classList.toggle(
+                                "sidebar-open"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+
+                // =================================================
+                // AUTOMATIC INACTIVITY LOGOUT
+                //
+                // 10 minutes with no detected activity.
+                //
+                // Any detected activity resets the timer.
+                // =================================================
+
+                const logoutForm =
+                    document.getElementById(
+                        "epsLogoutForm"
+                    );
+
+
+
+                if (!logoutForm) {
+
+                    return;
+
+                }
+
+
+
+                const inactivityLimit =
+                    10 * 60 * 1000;
+
+
+
+                let inactivityTimer =
+                    null;
+
+
+
+                // -------------------------------------------------
+                // LOGOUT AFTER INACTIVITY
+                // -------------------------------------------------
+
+                function logoutForInactivity() {
+
+                    if (!logoutForm) {
+
+                        return;
+
+                    }
+
+
+
+                    logoutForm.submit();
+
+                }
+
+
+
+                // -------------------------------------------------
+                // RESET TIMER
+                // -------------------------------------------------
+
+                function resetInactivityTimer() {
+
+                    if (inactivityTimer !== null) {
+
+                        clearTimeout(
+                            inactivityTimer
+                        );
+
+                    }
+
+
+
+                    inactivityTimer =
+                        setTimeout(
+                            logoutForInactivity,
+                            inactivityLimit
+                        );
+
+                }
+
+
+
+                // -------------------------------------------------
+                // DETECT USER ACTIVITY
+                // -------------------------------------------------
+
+                const activityEvents = [
+
+                    "mousemove",
+                    "mousedown",
+                    "keydown",
+                    "scroll",
+                    "touchstart",
+                    "click"
+
+                ];
+
+
+
+                activityEvents.forEach(
+                    function (eventName) {
+
+                        document.addEventListener(
+                            eventName,
+                            resetInactivityTimer,
+                            {
+                                passive: true
+                            }
+                        );
+
+                    }
+                );
+
+
+
+                // -------------------------------------------------
+                // START INITIAL TIMER
+                // -------------------------------------------------
+
+                resetInactivityTimer();
+
+            }
+        );
+
+    </script>
+
+
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false
+    )
+
+</body>
+
+</html>

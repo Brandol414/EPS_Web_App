@@ -1,0 +1,652 @@
+﻿@page
+@model EPS_Web_App.Pages.Reconciliation.HistoryModel
+
+@{
+    ViewData["Title"] = "Reconciliation History";
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                DATA QUALITY AUDIT
+            </div>
+
+            <h1 class="module-title">
+                Reconciliation History
+            </h1>
+
+            <p class="module-description">
+                Review previously resolved reconciliation alerts,
+                resolution notes, and closure history.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Active Reconciliation
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SUMMARY
+    ======================================================= -->
+
+    <div class="dashboard-metrics"
+         style="margin-bottom:24px;">
+
+
+        <!-- TOTAL RESOLVED -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    RESOLVED ALERTS
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.ResolvedAlertCount.ToString("N0")
+            </div>
+
+            <div class="dashboard-metric-note">
+                Total alerts closed by reconciliation
+            </div>
+
+        </div>
+
+
+        <!-- HIGH PRIORITY -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    HIGH PRIORITY RESOLVED
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    ↑
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.HighPriorityResolvedCount.ToString("N0")
+            </div>
+
+            <div class="dashboard-metric-note">
+                Resolved High or Critical alerts
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT PAGE -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    CURRENT PAGE
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    #
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.PageNumber
+            </div>
+
+            <div class="dashboard-metric-note">
+                of
+                @(Model.TotalPages == 0
+                    ? 1
+                    : Model.TotalPages)
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SEARCH / FILTERS
+    ======================================================= -->
+
+    <div class="module-search-panel">
+
+        <form method="get">
+
+            <div class="search-row">
+
+
+                <!-- SEARCH -->
+
+                <div class="search-field search-field-wide">
+
+                    <label for="search">
+                        Search
+                    </label>
+
+                    <input id="search"
+                           name="search"
+                           value="@Model.Search"
+                           class="form-control"
+                           placeholder="Specimen, alert type, resolution note, user..." />
+
+                </div>
+
+
+                <!-- PRIORITY -->
+
+                <div class="search-field">
+
+                    <label for="priority">
+                        Priority
+                    </label>
+
+                    <select id="priority"
+                            name="priority"
+                            class="form-select">
+
+                        <option value="">
+                            All priorities
+                        </option>
+
+                        @foreach (
+                            var priorityOption
+                            in new[]
+                            {
+                                "Critical",
+                                "High",
+                                "Medium",
+                                "Low"
+                            })
+                        {
+                            if (
+                                string.Equals(
+                                    Model.Priority,
+                                    priorityOption,
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="@priorityOption"
+                                        selected>
+                                    @priorityOption
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@priorityOption">
+                                    @priorityOption
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ALERT TYPE -->
+
+                <div class="search-field">
+
+                    <label for="alertType">
+                        Alert Type
+                    </label>
+
+                    <select id="alertType"
+                            name="alertType"
+                            class="form-select">
+
+                        <option value="">
+                            All alert types
+                        </option>
+
+
+                        @foreach (
+                            var alertTypeOption
+                            in new[]
+                            {
+                                "AST_NO_QUESTIONNAIRE_MATCH",
+                                "AST_LINKAGE_MISMATCH",
+                                "FIELD_LEVEL_MISMATCH"
+                            })
+                        {
+                            if (
+                                string.Equals(
+                                    Model.AlertType,
+                                    alertTypeOption,
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="@alertTypeOption"
+                                        selected>
+                                    @alertTypeOption
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@alertTypeOption">
+                                    @alertTypeOption
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="search-actions">
+
+                    <button type="submit"
+                            class="btn eps-btn-primary">
+
+                        Search
+
+                    </button>
+
+
+                    <a asp-page="./History"
+                       class="btn eps-btn-secondary">
+
+                        Clear
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ======================================================
+         HISTORY HEADER
+    ======================================================= -->
+
+    <div class="results-header">
+
+        <div>
+
+            <strong>
+                Resolved Reconciliation Alerts
+            </strong>
+
+            <span>
+                @Model.TotalItems.ToString("N0")
+                matching records
+            </span>
+
+        </div>
+
+
+        <div>
+
+            Page
+            @Model.PageNumber
+            of
+            @(Model.TotalPages == 0
+                ? 1
+                : Model.TotalPages)
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         HISTORY TABLE
+    ======================================================= -->
+
+    <div class="module-table-card">
+
+        @if (Model.Records.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    No resolved alerts found
+                </h3>
+
+                <p>
+                    There are no resolved alerts matching the
+                    current search and filter criteria.
+                </p>
+
+                <a asp-page="./History"
+                   class="btn eps-btn-secondary">
+
+                    Clear Filters
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Specimen
+                            </th>
+
+                            <th>
+                                Alert
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Resolution
+                            </th>
+
+                            <th>
+                                Resolved
+                            </th>
+
+                            <th>
+                                Resolved By
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var record in Model.Records)
+                        {
+                            <tr>
+
+
+                                <!-- SPECIMEN -->
+
+                                <td>
+
+                                    <div class="record-primary">
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                record.SpecimenId)
+                                                ? "—"
+                                                : record.SpecimenId
+                                        )
+
+                                    </div>
+
+
+                                    <div class="record-secondary">
+
+                                        Alert #@record.AlertId
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ALERT -->
+
+                                <td>
+
+                                    <span class="identifier-chip">
+
+                                        @record.AlertType
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- PRIORITY -->
+
+                                <td>
+
+                                    @if (
+                                        string.Equals(
+                                            record.Priority,
+                                            "Critical",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-priority-critical">
+
+                                            Critical
+
+                                        </span>
+                                    }
+                                    else if (
+                                        string.Equals(
+                                            record.Priority,
+                                            "High",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-priority-high">
+
+                                            High
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="identifier-chip">
+
+                                            @record.Priority
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- RESOLUTION -->
+
+                                <td>
+
+                                    <div style="
+                                        max-width:430px;
+                                        white-space:normal;
+                                        line-height:1.5;
+                                        ">
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                record.ResolutionNote)
+                                                ? "No resolution note recorded."
+                                                : record.ResolutionNote
+                                        )
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- RESOLVED -->
+
+                                <td>
+
+                                    @if (
+                                        record.ResolvedAt.HasValue)
+                                    {
+                                        @(
+                                            record.ResolvedAt.Value
+                                                .ToLocalTime()
+                                                .ToString(
+                                                    "dd MMM yyyy HH:mm"
+                                                )
+                                        )
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            —
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- USER -->
+
+                                <td>
+
+                                    @(
+                                        string.IsNullOrWhiteSpace(
+                                            record.ResolvedBy)
+                                            ? "—"
+                                            : record.ResolvedBy
+                                    )
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td class="text-end">
+
+                                    <a asp-page="./View"
+                                       asp-route-id="@record.AlertId"
+                                       class="
+                                        btn
+                                        btn-sm
+                                        eps-btn-view">
+
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+
+        <!-- ==================================================
+             PAGINATION
+        =================================================== -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="module-pagination">
+
+                <div class="pagination-info">
+
+                    Page
+                    @Model.PageNumber
+                    of
+                    @Model.TotalPages
+
+                </div>
+
+
+                <div class="pagination-actions">
+
+                    @if (Model.PageNumber > 1)
+                    {
+                        <a asp-page="./History"
+                           asp-route-search="@Model.Search"
+                           asp-route-priority="@Model.Priority"
+                           asp-route-alertType="@Model.AlertType"
+                           asp-route-pageNumber="@(Model.PageNumber - 1)"
+                           class="btn eps-btn-secondary">
+
+                            ← Previous
+
+                        </a>
+                    }
+
+
+                    @if (
+                        Model.PageNumber <
+                        Model.TotalPages
+                    )
+                    {
+                        <a asp-page="./History"
+                           asp-route-search="@Model.Search"
+                           asp-route-priority="@Model.Priority"
+                           asp-route-alertType="@Model.AlertType"
+                           asp-route-pageNumber="@(Model.PageNumber + 1)"
+                           class="btn eps-btn-primary">
+
+                            Next →
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,1535 @@
+﻿@page
+@model EPS_Web_App.Pages.AST.CreateModel
+
+@{
+    ViewData["Title"] = "New AST Record";
+}
+
+<div class="questionnaire-create-page">
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="create-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                AST LABORATORY DATA ENTRY
+            </div>
+
+            <h1 class="module-title">
+                New AST Record
+            </h1>
+
+            <p class="module-description">
+                Enter antimicrobial susceptibility testing results
+                and associate the laboratory record with an EPS specimen.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to AST Laboratory
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         VALIDATION
+    ======================================================= -->
+
+    <div asp-validation-summary="All"
+         class="validation-summary">
+    </div>
+
+
+    <form method="post"
+          id="astForm">
+
+
+        <!-- ==================================================
+             SECTION 01 — SPECIMEN IDENTITY
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    01
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        SPECIMEN
+                    </div>
+
+                    <h2>
+                        Specimen & Laboratory Identity
+                    </h2>
+
+                    <p>
+                        Identify the laboratory specimen and its
+                        surveillance site.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+
+                <!-- SPECIMEN ID -->
+
+                <div class="entry-field entry-field-wide">
+
+                    <label asp-for="Input.SpecimenId">
+
+                        Specimen ID
+
+                        <span class="required-mark">*</span>
+
+                    </label>
+
+
+                    <input asp-for="Input.SpecimenId"
+                           class="form-control"
+                           placeholder="EPS1549-KCH-9998A"
+                           autocomplete="off" />
+
+
+                    <span asp-validation-for="Input.SpecimenId"
+                          class="text-danger">
+                    </span>
+
+
+                    <div class="field-help">
+                        Format: EPS1549-SITE-####A/B
+                    </div>
+
+                </div>
+
+
+                <!-- LAN -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.Lan">
+
+                        LAN
+
+                    </label>
+
+
+                    <input asp-for="Input.Lan"
+                           class="form-control"
+                           placeholder="MHK#####"
+                           autocomplete="off" />
+
+
+                    <span asp-validation-for="Input.Lan"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- SITE -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.SiteCode">
+
+                        Site Code
+
+                    </label>
+
+
+                    <input asp-for="Input.SiteCode"
+                           class="form-control"
+                           placeholder="KCH"
+                           autocomplete="off" />
+
+
+                    <span asp-validation-for="Input.SiteCode"
+                          class="text-danger">
+                    </span>
+
+
+                    <div class="field-help">
+                        Automatically derived from the specimen ID if left blank.
+                    </div>
+
+                </div>
+
+
+                <!-- MONTH -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MonthCollected">
+
+                        Month Collected
+
+                    </label>
+
+
+                    <input asp-for="Input.MonthCollected"
+                           type="month"
+                           class="form-control" />
+
+
+                    <div class="field-help">
+                        Select the month the specimen was collected.
+                    </div>
+
+
+                    <span asp-validation-for="Input.MonthCollected"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- PARTICIPANT -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ParticipantType">
+
+                        Participant Type
+
+                    </label>
+
+
+                    <select asp-for="Input.ParticipantType"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Civilian">
+                            Civilian
+                        </option>
+
+                        <option value="Military">
+                            Military
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DIAGNOSTIC TEST -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.DiagnosticTest">
+
+                        Diagnostic Test
+
+                    </label>
+
+
+                    <input asp-for="Input.DiagnosticTest"
+                           class="form-control"
+                           placeholder="e.g. Culture / AST" />
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 02 — CLINICAL / TREATMENT CONTEXT
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    02
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        CLINICAL CONTEXT
+                    </div>
+
+                    <h2>
+                        Clinical & Treatment Context
+                    </h2>
+
+                    <p>
+                        Additional information associated with
+                        the laboratory record.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+
+                <!-- GTD -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.GtdStatus">
+
+                        GTD Status
+
+                    </label>
+
+
+                    <select asp-for="Input.GtdStatus"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DIARRHEA MEDICATION -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.DiarrheaMedicationPast72h">
+
+                        Diarrhea Medication — Past 72 Hours
+
+                    </label>
+
+
+                    <select asp-for="Input.DiarrheaMedicationPast72h"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Yes">
+                            Yes
+                        </option>
+
+                        <option value="No">
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- MEDICATIONS -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MedicationsPast72h">
+
+                        Medications — Past 72 Hours
+
+                    </label>
+
+
+                    <textarea asp-for="Input.MedicationsPast72h"
+                              class="form-control"
+                              rows="3"
+                              placeholder="List medications where applicable"></textarea>
+
+                </div>
+
+
+                <!-- FUNCTIONAL IMPACT -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.IllnessFunctionalImpact">
+
+                        Illness Functional Impact
+
+                    </label>
+
+
+                    <select asp-for="Input.IllnessFunctionalImpact"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Normal">
+                            Normal
+                        </option>
+
+                        <option value="Decreased <= 50%">
+                            Decreased <= 50%
+                        </option>
+
+                        <option value="Decreased > 50%">
+                            Decreased > 50%
+                        </option>
+
+                        <option value="Completely unable to function">
+                            Completely unable to function
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 03 — ORGANISM IDENTIFICATION
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    03
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        IDENTIFICATION
+                    </div>
+
+                    <h2>
+                        Organism Identification
+                    </h2>
+
+                    <p>
+                        Record identified bacterial, viral,
+                        or parasitic organisms.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+
+                <!-- BACTERIAL -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.BacterialIdentification">
+
+                        Bacterial Identification
+
+                    </label>
+
+
+                    <input asp-for="Input.BacterialIdentification"
+                           class="form-control"
+                           placeholder="e.g. Shigella flexneri" />
+
+                </div>
+
+
+                <!-- VIRAL -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ViralIdentification">
+
+                        Viral Identification
+
+                    </label>
+
+
+                    <input asp-for="Input.ViralIdentification"
+                           class="form-control"
+                           placeholder="e.g. Rotavirus" />
+
+                </div>
+
+
+                <!-- PARASITE -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.ParasiteIdentification">
+
+                        Parasite Identification
+
+                    </label>
+
+
+                    <input asp-for="Input.ParasiteIdentification"
+                           class="form-control"
+                           placeholder="e.g. Giardia" />
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 04 — RESISTANCE
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    04
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        RESISTANCE
+                    </div>
+
+                    <h2>
+                        Resistance Classification
+                    </h2>
+
+                    <p>
+                        Record MDR and ESBL laboratory classifications.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-3">
+
+
+                <!-- MDR -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.MdrStatus">
+
+                        MDR Status
+
+                    </label>
+
+
+                    <select asp-for="Input.MdrStatus"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Positive">
+                            Positive
+                        </option>
+
+                        <option value="Negative">
+                            Negative
+                        </option>
+
+                        <option value="Not Determined">
+                            Not Determined
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ESBL -->
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.EsblStatus">
+
+                        ESBL Status
+
+                    </label>
+
+
+                    <select asp-for="Input.EsblStatus"
+                            class="form-select">
+
+                        <option value="">
+                            Select
+                        </option>
+
+                        <option value="Positive">
+                            Positive
+                        </option>
+
+                        <option value="Negative">
+                            Negative
+                        </option>
+
+                        <option value="Not Determined">
+                            Not Determined
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             SECTION 05 — AST RESULTS
+        =================================================== -->
+
+        <section class="entry-section">
+
+            <div class="entry-section-header">
+
+                <div class="entry-section-number">
+                    05
+                </div>
+
+                <div>
+
+                    <div class="entry-section-kicker">
+                        ANTIMICROBIAL SUSCEPTIBILITY
+                    </div>
+
+                    <h2>
+                        AST Results
+                    </h2>
+
+                    <p>
+                        Enter the MIC and interpretation for each
+                        antimicrobial tested. Untested agents may remain blank.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-sm ast-results-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Antimicrobial
+                            </th>
+
+                            <th>
+                                MIC
+                            </th>
+
+                            <th>
+                                Interpretation
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <!-- AMIKACIN -->
+
+                        <tr>
+
+                            <td>
+                                Amikacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmikacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmikacinInt"
+                                       class="form-control form-control-sm"
+                                       placeholder="S / I / R" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- AMOXICILLIN CLAVULANATE -->
+
+                        <tr>
+
+                            <td>
+                                Amoxicillin / Clavulanate
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmoxicillinClavulanateMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmoxicillinClavulanateInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- AMPICILLIN SULBACTAM -->
+
+                        <tr>
+
+                            <td>
+                                Ampicillin / Sulbactam
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmpicillinSulbactamMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmpicillinSulbactamInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- AMPICILLIN -->
+
+                        <tr>
+
+                            <td>
+                                Ampicillin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmpicillinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AmpicillinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- AZITHROMYCIN -->
+
+                        <tr>
+
+                            <td>
+                                Azithromycin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AzithromycinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AzithromycinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- AZTREONAM -->
+
+                        <tr>
+
+                            <td>
+                                Aztreonam
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AztreonamMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.AztreonamInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFAZOLIN -->
+
+                        <tr>
+
+                            <td>
+                                Cefazolin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefazolinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefazolinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFEPIME -->
+
+                        <tr>
+
+                            <td>
+                                Cefepime
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefepimeMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefepimeInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFOTAXIME -->
+
+                        <tr>
+
+                            <td>
+                                Cefotaxime
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotaximeMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotaximeInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFOTAXIME CLAVULANATE -->
+
+                        <tr>
+
+                            <td>
+                                Cefotaxime / Clavulanate
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotaximeClavulanateMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotaximeClavulanateInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFOTETAN -->
+
+                        <tr>
+
+                            <td>
+                                Cefotetan
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotetanMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefotetanInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFOXITIN -->
+
+                        <tr>
+
+                            <td>
+                                Cefoxitin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefoxitinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefoxitinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFTAZIDIME -->
+
+                        <tr>
+
+                            <td>
+                                Ceftazidime
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftazidimeMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftazidimeInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFTAZIDIME CLAVULANATE -->
+
+                        <tr>
+
+                            <td>
+                                Ceftazidime / Clavulanate
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftazidimeClavulanateMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftazidimeClavulanateInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFTOLOZANE TAZOBACTAM -->
+
+                        <tr>
+
+                            <td>
+                                Ceftolozane / Tazobactam
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftolozaneTazobactamMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftolozaneTazobactamInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFTRIAXONE -->
+
+                        <tr>
+
+                            <td>
+                                Ceftriaxone
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftriaxoneMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CeftriaxoneInt"
+                                       class="form-control form-control-sm"
+                                       placeholder="S / I / R" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEFUROXIME -->
+
+                        <tr>
+
+                            <td>
+                                Cefuroxime
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefuroximeMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CefuroximeInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CEPHALOTHIN -->
+
+                        <tr>
+
+                            <td>
+                                Cephalothin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CephalothinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CephalothinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CHLORAMPHENICOL -->
+
+                        <tr>
+
+                            <td>
+                                Chloramphenicol
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ChloramphenicolMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ChloramphenicolInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- CIPROFLOXACIN -->
+
+                        <tr>
+
+                            <td>
+                                Ciprofloxacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CiprofloxacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.CiprofloxacinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- COLISTIN -->
+
+                        <tr>
+
+                            <td>
+                                Colistin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ColistinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ColistinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- ERTAPENEM -->
+
+                        <tr>
+
+                            <td>
+                                Ertapenem
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ErtapenemMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ErtapenemInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- FOSFOMYCIN -->
+
+                        <tr>
+
+                            <td>
+                                Fosfomycin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.FosfomycinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.FosfomycinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- GATIFLOXACIN -->
+
+                        <tr>
+
+                            <td>
+                                Gatifloxacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.GatifloxacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.GatifloxacinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- GENTAMICIN -->
+
+                        <tr>
+
+                            <td>
+                                Gentamicin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.GentamicinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.GentamicinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- IMIPENEM -->
+
+                        <tr>
+
+                            <td>
+                                Imipenem
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ImipenemMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.ImipenemInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- LEVOFLOXACIN -->
+
+                        <tr>
+
+                            <td>
+                                Levofloxacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.LevofloxacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.LevofloxacinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- MEROPENEM -->
+
+                        <tr>
+
+                            <td>
+                                Meropenem
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.MeropenemMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.MeropenemInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- MOXIFLOXACIN -->
+
+                        <tr>
+
+                            <td>
+                                Moxifloxacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.MoxifloxacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.MoxifloxacinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- NALIDIXIC ACID -->
+
+                        <tr>
+
+                            <td>
+                                Nalidixic Acid
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NalidixicAcidMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NalidixicAcidInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- NITROFURANTOIN -->
+
+                        <tr>
+
+                            <td>
+                                Nitrofurantoin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NitrofurantoinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NitrofurantoinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- NORFLOXACIN -->
+
+                        <tr>
+
+                            <td>
+                                Norfloxacin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NorfloxacinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.NorfloxacinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- PIPERACILLIN TAZOBACTAM -->
+
+                        <tr>
+
+                            <td>
+                                Piperacillin / Tazobactam
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.PiperacillinTazobactamMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.PiperacillinTazobactamInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- PIPERACILLIN -->
+
+                        <tr>
+
+                            <td>
+                                Piperacillin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.PiperacillinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.PiperacillinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TETRACYCLINE -->
+
+                        <tr>
+
+                            <td>
+                                Tetracycline
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TetracyclineMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TetracyclineInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TIGECYCLINE -->
+
+                        <tr>
+
+                            <td>
+                                Tigecycline
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TigecyclineMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TigecyclineInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TICARCILLIN CLAVULANATE -->
+
+                        <tr>
+
+                            <td>
+                                Ticarcillin / Clavulanate
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TicarcillinClavulanateMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TicarcillinClavulanateInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TOBRAMYCIN -->
+
+                        <tr>
+
+                            <td>
+                                Tobramycin
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TobramycinMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TobramycinInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TRIMETHOPRIM SULFAMETHOXAZOLE -->
+
+                        <tr>
+
+                            <td>
+                                Trimethoprim / Sulfamethoxazole
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TrimethoprimSulfamethoxazoleMic"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                            <td>
+                                <input asp-for="Input.TrimethoprimSulfamethoxazoleInt"
+                                       class="form-control form-control-sm" />
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             FORM ACTIONS
+        =================================================== -->
+
+        <div class="create-form-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="btn eps-btn-primary">
+
+                Save AST Record
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

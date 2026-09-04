@@ -1,0 +1,1470 @@
+﻿@page
+@model EPS_Web_App.Pages.Reconciliation.ViewModel
+
+@{
+    ViewData["Title"] = "Reconciliation Review";
+
+
+    string Display(
+        string? value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? "—"
+            : value;
+    }
+
+
+    string StatusClass(
+        string? status)
+    {
+        if (string.Equals(
+            status,
+            "Open",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return "alert-status-open";
+        }
+
+
+        if (string.Equals(
+            status,
+            "Under Review",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return "alert-status-open";
+        }
+
+
+        return "alert-status-closed";
+    }
+
+
+    // =========================================================
+    // PRE-FORMATTED DATES
+    //
+    // Date formatting is deliberately performed here rather
+    // than inside the HTML markup.
+    // =========================================================
+
+    var alertCreatedText =
+        Model.Alert != null
+            ? Model.Alert.CreatedAt
+                .ToLocalTime()
+                .ToString(
+                    "dd MMM yyyy HH:mm")
+            : string.Empty;
+
+
+    var alertResolvedText =
+        Model.Alert?.ResolvedAt.HasValue == true
+            ? Model.Alert.ResolvedAt.Value
+                .ToLocalTime()
+                .ToString(
+                    "dd MMM yyyy HH:mm")
+            : string.Empty;
+}
+
+
+<div class="questionnaire-view-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="record-view-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                DATA QUALITY REVIEW
+            </div>
+
+            <h1 class="record-view-title">
+                Reconciliation Review
+            </h1>
+
+
+            @if (Model.Alert != null)
+            {
+                <div class="record-view-meta">
+
+                    <span>
+                        Alert #@Model.Alert.AlertId
+                    </span>
+
+                    <span class="record-meta-divider">
+                        |
+                    </span>
+
+                    <span>
+                        Specimen:
+                        @Display(Model.Alert.SpecimenId)
+                    </span>
+
+                    <span class="record-meta-divider">
+                        |
+                    </span>
+
+                    <span>
+                        Type:
+                        @Display(Model.Alert.AlertType)
+                    </span>
+
+                </div>
+            }
+            else if (Model.AstRecords.Count > 0)
+            {
+                <div class="record-view-meta">
+
+                    <span>
+                        AST Reconciliation Candidate
+                    </span>
+
+                    <span class="record-meta-divider">
+                        |
+                    </span>
+
+                    <span>
+                        Specimen:
+                        @Display(
+                            Model.AstRecords[0].SpecimenId
+                        )
+                    </span>
+
+                </div>
+            }
+
+        </div>
+
+
+        <div class="record-view-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to Reconciliation
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         VALIDATION
+    ======================================================= -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="validation-summary">
+    </div>
+
+
+    <!-- ======================================================
+         ALERT STATUS
+    ======================================================= -->
+    @if (Model.Alert != null)
+    {
+        <div class="record-notice record-notice-neutral">
+
+            <div>
+
+                <strong>
+
+                    <span class="
+                        identifier-chip
+                        @StatusClass(Model.Alert.Status)">
+
+                        @Display(Model.Alert.Status)
+
+                    </span>
+
+                </strong>
+
+                <span>
+
+                    @Display(Model.Alert.Priority)
+                    priority —
+                    @Display(Model.Alert.AlertType)
+
+                </span>
+
+            </div>
+
+
+            <div>
+
+                Created:
+                @alertCreatedText
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="record-notice record-notice-neutral">
+
+            <strong>
+                AST linkage candidate
+            </strong>
+
+            <span>
+                This laboratory record is being reviewed because
+                it is not currently marked as Linked.
+            </span>
+
+        </div>
+    }
+
+
+    <!-- ======================================================
+         SECTION 01 — ISSUE
+    ======================================================= -->
+    @if (Model.Alert != null)
+    {
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        RECONCILIATION ISSUE
+                    </div>
+
+                    <h2>
+                        Alert Details
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-info-grid">
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Alert Type
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.Alert.AlertType
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Priority
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.Alert.Priority
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.Alert.Status
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Source Record
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.Alert.SourceRecord
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Specimen ID
+                    </span>
+
+                    <strong class="identifier-text">
+                        @Display(
+                            Model.Alert.SpecimenId
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Created
+                    </span>
+
+                    <strong>
+                        @alertCreatedText
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div style="margin-top:20px;">
+
+                <div class="record-section-kicker">
+                    DESCRIPTION
+                </div>
+
+                <div style="
+                    margin-top:7px;
+                    line-height:1.6;
+                    color:var(--eps-text);
+                    ">
+
+                    @Display(
+                        Model.Alert.Description
+                    )
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 SOURCE RECORD LINK
+            =================================================== -->
+            @if (!string.IsNullOrWhiteSpace(
+                            Model.Alert.SourceRecord))
+            {
+                var source =
+                    Model.Alert.SourceRecord.Trim();
+
+
+                if (
+                    source.StartsWith(
+                        "AST:",
+                        StringComparison.OrdinalIgnoreCase)
+                    &&
+                    long.TryParse(
+                        source.Substring(4),
+                        out var astSourceId)
+                )
+                {
+                    <div style="margin-top:18px;">
+
+                        <a asp-page="/AST/View"
+                           asp-route-id="@astSourceId"
+                           class="btn eps-btn-secondary">
+
+                            Open AST Source Record →
+
+                        </a>
+
+                    </div>
+                }
+            }
+
+        </section>
+    }
+
+
+    <!-- ======================================================
+         SECTION 02 — SIDE-BY-SIDE COMPARISON
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    FIELD-LEVEL RECONCILIATION
+                </div>
+
+                <h2>
+                    Questionnaire vs AST
+                </h2>
+
+                <p>
+                    Direct comparison of fields that should agree
+                    across the two surveillance records.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.QuestionnaireRecord == null)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No questionnaire record available
+                </strong>
+
+                <span>
+                    This specimen cannot be compared field-by-field
+                    because no matching questionnaire record exists.
+                </span>
+
+            </div>
+        }
+        else if (Model.AstRecords.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No AST record available
+                </strong>
+
+                <span>
+                    No AST record is available for comparison.
+                </span>
+
+            </div>
+        }
+        else if (!Model.HasDifferences)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No field-level differences detected
+                </strong>
+
+                <span>
+                    The comparable Questionnaire and AST fields
+                    currently agree.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="reconciliation-comparison-card">
+
+                <div class="
+                    reconciliation-comparison-header">
+
+                    <div>
+                        Field
+                    </div>
+
+                    <div>
+                        Questionnaire
+                    </div>
+
+                    <div>
+                        AST Laboratory
+                    </div>
+
+                </div>
+
+
+                @foreach (
+                    var difference
+                    in Model.Differences)
+                {
+                    <div class="
+                        reconciliation-comparison-row
+                        reconciliation-comparison-difference">
+
+                        <div class="
+                            reconciliation-comparison-field">
+
+                            <strong>
+                                @difference.FieldName
+                            </strong>
+
+                        </div>
+
+
+                        <div class="
+                            reconciliation-comparison-value">
+
+                            @difference.QuestionnaireValue
+
+                        </div>
+
+
+                        <div class="
+                            reconciliation-comparison-value">
+
+                            @difference.AstValue
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 03 — QUESTIONNAIRE EVIDENCE
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    QUESTIONNAIRE
+                </div>
+
+                <h2>
+                    Questionnaire Evidence
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.QuestionnaireRecord != null)
+        {
+            <div class="record-info-grid">
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Questionnaire ID
+                    </span>
+
+                    <strong>
+                        @Model.QuestionnaireRecord.QuestionnaireId
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Specimen ID
+                    </span>
+
+                    <strong class="identifier-text">
+                        @Display(
+                            Model.QuestionnaireRecord.SpecimenId
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Site
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.QuestionnaireRecord.SiteCode
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        LAN
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.QuestionnaireRecord.Lan
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Bacterial Identification
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.QuestionnaireRecord.BacterialIdentification
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="record-info-item">
+
+                    <span>
+                        Viral Identification
+                    </span>
+
+                    <strong>
+                        @Display(
+                            Model.QuestionnaireRecord.ViralIdentification
+                        )
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div style="margin-top:18px;">
+
+                <a href="/Questionnaire/View/@Model.QuestionnaireRecord.QuestionnaireId"
+                   class="btn eps-btn-secondary">
+
+                    Open Questionnaire Record →
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No questionnaire match found
+                </strong>
+
+                <span>
+                    There is currently no questionnaire record
+                    for this specimen.
+                </span>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 04 — AST EVIDENCE
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    LABORATORY EVIDENCE
+                </div>
+
+                <h2>
+                    AST Records for Specimen
+                </h2>
+
+                <p>
+                    Laboratory records found for the same specimen.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.AstRecords.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon">
+                    A
+                </div>
+
+                <h3>
+                    No AST records found
+                </h3>
+
+                <p>
+                    No AST record is associated with this specimen.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                AST ID
+                            </th>
+
+                            <th>
+                                Specimen
+                            </th>
+
+                            <th>
+                                LAN
+                            </th>
+
+                            <th>
+                                Site
+                            </th>
+
+                            <th>
+                                Organism
+                            </th>
+
+                            <th>
+                                MDR
+                            </th>
+
+                            <th>
+                                ESBL
+                            </th>
+
+                            <th>
+                                Linkage
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var ast in Model.AstRecords)
+                        {
+                            <tr>
+
+                                <td>
+                                    #@ast.AstRecordId
+                                </td>
+
+
+                                <td>
+
+                                    <div class="record-primary">
+
+                                        @Display(
+                                            ast.SpecimenId
+                                        )
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    @Display(
+                                        ast.Lan
+                                    )
+                                </td>
+
+
+                                <td>
+
+                                    <span class="site-chip">
+
+                                        @Display(
+                                            ast.SiteCode
+                                        )
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="pathogen-list">
+
+                                        @if (
+                                            !string.IsNullOrWhiteSpace(
+                                                ast.BacterialIdentification)
+                                        )
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-bacterial">
+
+                                                @ast.BacterialIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            !string.IsNullOrWhiteSpace(
+                                                ast.ViralIdentification)
+                                        )
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-viral">
+
+                                                @ast.ViralIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            !string.IsNullOrWhiteSpace(
+                                                ast.ParasiteIdentification)
+                                        )
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-parasite">
+
+                                                @ast.ParasiteIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            string.IsNullOrWhiteSpace(
+                                                ast.BacterialIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                ast.ViralIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                ast.ParasiteIdentification)
+                                        )
+                                        {
+                                            <span class="record-secondary">
+                                                No organism recorded
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    @Display(
+                                        ast.MdrStatus
+                                    )
+                                </td>
+
+
+                                <td>
+                                    @Display(
+                                        ast.EsblStatus
+                                    )
+                                </td>
+
+
+                                <td>
+
+                                    @if (
+                                        string.Equals(
+                                            ast.LinkageStatus,
+                                            "Linked",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            Linked
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-unlinked">
+
+                                            @Display(
+                                                ast.LinkageStatus
+                                            )
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td class="text-end">
+
+                                    <a asp-page="/AST/View"
+                                       asp-route-id="@ast.AstRecordId"
+                                       class="
+                                        btn
+                                        btn-sm
+                                        eps-btn-view">
+
+                                        Open
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 05 — ADMINISTRATIVE RESOLUTION
+    ======================================================= -->
+    @if (Model.Alert != null)
+    {
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        ADMINISTRATIVE DECISION
+                    </div>
+
+                    <h2>
+                        Alert Resolution
+                    </h2>
+
+                    <p>
+                        Record the outcome of the reconciliation review.
+                        This changes the alert status only; source
+                        Questionnaire and AST records are not silently
+                        modified.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if (Model.IsClosed)
+            {
+                <div class="record-notice record-notice-neutral">
+
+                    <div>
+
+                        <strong>
+                            @Model.Alert.Status
+                        </strong>
+
+                        <span>
+                            This alert has reached its current final
+                            disposition.
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        @if (Model.Alert.ResolvedAt.HasValue)
+                        {
+                            <span>
+
+                                Actioned:
+                                @alertResolvedText
+
+                            </span>
+                        }
+
+
+                        @if (!string.IsNullOrWhiteSpace(
+                            Model.Alert.ResolvedBy))
+                        {
+                            <span>
+
+                                · By:
+                                @Model.Alert.ResolvedBy
+
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(
+                    Model.Alert.ResolutionNote))
+                {
+                    <div style="margin-top:18px;">
+
+                        <div class="record-section-kicker">
+                            RESOLUTION NOTE
+                        </div>
+
+                        <div style="
+                            margin-top:7px;
+                            line-height:1.6;
+                            ">
+
+                            @Model.Alert.ResolutionNote
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <div style="
+                    margin-top:18px;
+                    display:flex;
+                    flex-wrap:wrap;
+                    gap:10px;">
+
+                    <form method="post"
+                          asp-page="./View"
+                          asp-route-id="@Model.Alert.AlertId"
+                          asp-page-handler="Resolution"
+                          style="margin:0;">
+
+                        <input type="hidden"
+                               name="ResolutionAction"
+                               value="Under Review" />
+
+
+                        <input type="hidden"
+                               name="ResolutionNote"
+                               value="Alert reopened for further administrative review." />
+
+
+                        <button type="submit"
+                                class="btn eps-btn-secondary">
+
+                            Reopen for Review
+
+                        </button>
+
+                    </form>
+
+                </div>
+            }
+            else
+            {
+                <form method="post"
+                      asp-page="./View"
+                      asp-route-id="@Model.Alert.AlertId"
+                      asp-page-handler="Resolution">
+
+                    <!-- =========================================
+                         ACTION
+                    ========================================== -->
+
+                    <div class="entry-field">
+
+                        <label for="ResolutionAction">
+
+                            Administrative Action
+
+                            <span class="required-mark">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select id="ResolutionAction"
+                                name="ResolutionAction"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Select administrative action
+                            </option>
+
+
+                            @if (
+                                string.Equals(
+                                    Model.ResolutionAction,
+                                    "Under Review",
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="Under Review"
+                                        selected>
+                                    Under Review
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Under Review">
+                                    Under Review
+                                </option>
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    Model.ResolutionAction,
+                                    "Resolved",
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="Resolved"
+                                        selected>
+                                    Resolve
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Resolved">
+                                    Resolve
+                                </option>
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    Model.ResolutionAction,
+                                    "Deferred",
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="Deferred"
+                                        selected>
+                                    Defer
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Deferred">
+                                    Defer
+                                </option>
+                            }
+
+
+                            @if (
+                                string.Equals(
+                                    Model.ResolutionAction,
+                                    "Not an Error",
+                                    StringComparison.OrdinalIgnoreCase)
+                            )
+                            {
+                                <option value="Not an Error"
+                                        selected>
+                                    Not an Error
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Not an Error">
+                                    Not an Error
+                                </option>
+                            }
+
+                        </select>
+
+
+                        <span asp-validation-for="ResolutionAction"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         NOTE
+                    ========================================== -->
+
+                    <div class="entry-field"
+                         style="margin-top:18px;">
+
+                        <label for="ResolutionNote">
+
+                            Review / Resolution Note
+
+                            <span class="required-mark">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <textarea id="ResolutionNote"
+                                  name="ResolutionNote"
+                                  class="form-control"
+                                  rows="5"
+                                  maxlength="2000"
+                                  required
+                                  placeholder="Document what was reviewed, what was confirmed or corrected, and why this action is appropriate.">@Model.ResolutionNote</textarea>
+
+
+                        <div style="
+                            margin-top:6px;
+                            font-size:11px;
+                            color:var(--eps-muted);">
+
+                            Required. This note is permanently
+                            recorded with the administrative audit.
+
+                        </div>
+
+
+                        <span asp-validation-for="ResolutionNote"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ACTION BUTTONS
+                    ========================================== -->
+
+                    <div style="
+                        display:flex;
+                        justify-content:flex-end;
+                        gap:10px;
+                        flex-wrap:wrap;
+                        margin-top:20px;">
+
+                        <a asp-page="./Index"
+                           class="btn eps-btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="btn eps-btn-primary">
+
+                            Save Administrative Action
+
+                        </button>
+
+                    </div>
+
+                </form>
+            }
+
+        </section>
+    }
+
+
+    <!-- ======================================================
+         SECTION 06 — ADMINISTRATIVE AUDIT HISTORY
+    ======================================================= -->
+    @if (Model.Alert != null)
+    {
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        AUDIT TRAIL
+                    </div>
+
+                    <h2>
+                        Administrative History
+                    </h2>
+
+                    <p>
+                        Immutable administrative status-change history
+                        for this reconciliation alert.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if (Model.AuditHistory.Count == 0)
+            {
+                <div class="record-notice record-notice-neutral">
+
+                    <strong>
+                        No administrative actions recorded
+                    </strong>
+
+                    <span>
+                        This alert has not yet received an
+                        administrative status change.
+                    </span>
+
+                </div>
+            }
+            else
+            {
+                <div class="record-subtable">
+
+                    <div class="record-subtable-header">
+
+                        <div>
+                            Action
+                        </div>
+
+                        <div>
+                            Administrator
+                        </div>
+
+                        <div>
+                            Date / Time
+                        </div>
+
+                    </div>
+
+
+                    @foreach (
+                        var audit
+                        in Model.AuditHistory)
+                    {
+                        var auditChangedText =
+                            audit.ChangedAt
+                                .ToLocalTime()
+                                .ToString(
+                                    "dd MMM yyyy HH:mm");
+
+
+                        <div class="record-subtable-row">
+
+                            <div>
+
+                                <strong>
+                                    @Display(
+                                        audit.NewValue
+                                    )
+                                </strong>
+
+                                <div class="record-secondary"
+                                     style="margin-top:5px;">
+
+                                    Previous:
+                                    @Display(
+                                        audit.OldValue
+                                    )
+
+                                </div>
+
+                            </div>
+
+
+                            <div>
+
+                                @Display(
+                                    audit.ChangedBy
+                                )
+
+                            </div>
+
+
+                            <div>
+
+                                @auditChangedText
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            padding:10px 14px;
+                            border-bottom:1px solid var(--eps-border);
+                            background:var(--eps-panel-soft);">
+
+                            <div class="record-secondary">
+                                REASON / NOTE
+                            </div>
+
+                            <div style="
+                                margin-top:4px;
+                                line-height:1.6;
+                                white-space:normal;
+                                word-break:break-word;">
+
+                                @Display(
+                                    audit.Reason
+                                )
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </section>
+    }
+
+
+    <!-- ======================================================
+         FOOTER
+    ======================================================= -->
+
+    <div class="record-view-footer">
+
+        <a asp-page="./Index"
+           class="btn eps-btn-secondary">
+
+            ← Back to Reconciliation
+
+        </a>
+
+    </div>
+
+</div>

@@ -1,0 +1,1094 @@
+﻿@page
+@model EPS_Web_App.Pages.Administration.IndexModel
+
+@using EPS_Web_App.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext DbContext
+
+@{
+    ViewData["Title"] = "Administration";
+
+
+    // =========================================================
+    // DISPLAY HELPER
+    // =========================================================
+
+    string Display(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? "—"
+            : value;
+    }
+
+
+    // =========================================================
+    // LIVE ADMINISTRATOR ACCOUNT COUNT
+    //
+    // This counts currently ACTIVE administrator accounts.
+    //
+    // It does NOT yet mean "currently logged in".
+    // =========================================================
+
+    var administratorAccountCount =
+        await DbContext.AdminUsers
+            .AsNoTracking()
+            .CountAsync(
+                x => x.IsActive
+            );
+}
+
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                SYSTEM ADMINISTRATION
+            </div>
+
+
+            <h1 class="module-title">
+                Administration
+            </h1>
+
+
+            <p class="module-description">
+                Manage surveillance-system configuration,
+                authorized administrators, lookup values,
+                form versions, and data-entry audit information.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+
+            <a asp-page="./Users/Index"
+               class="btn eps-btn-primary">
+
+                <i class="bi bi-people-fill"
+                   aria-hidden="true"></i>
+
+                Administrator Accounts
+
+            </a>
+
+
+            <a asp-page="./Lookups/Index"
+               class="btn eps-btn-secondary">
+
+                <i class="bi bi-list-check"
+                   aria-hidden="true"></i>
+
+                Lookup Management
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SYSTEM OVERVIEW
+    ======================================================= -->
+
+    <div class="dashboard-metrics"
+         style="margin-bottom:24px;">
+
+
+        <!-- ==================================================
+             QUESTIONNAIRE RECORDS
+        =================================================== -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    QUESTIONNAIRE RECORDS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-file-earmark-medical-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.QuestionnaireCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Surveillance questionnaire entries
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             AST RECORDS
+        =================================================== -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    AST RECORDS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.AstCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Laboratory susceptibility records
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             OPEN ALERTS
+        =================================================== -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-warning">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    OPEN ALERTS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.OpenAlertCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Reconciliation issues requiring attention
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             AUDIT ENTRIES
+        =================================================== -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    AUDIT ENTRIES
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-journal-check"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.AuditEntryCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Recorded data-entry changes
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         ADMINISTRATION TOOLS
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    ADMINISTRATION TOOLS
+                </div>
+
+
+                <h2>
+                    System Management
+                </h2>
+
+
+                <p>
+                    Maintain the users and configuration that
+                    govern the surveillance platform.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-stat-row">
+
+
+            <!-- ==================================================
+                 ADMINISTRATOR ACCOUNTS
+            =================================================== -->
+
+            <div class="record-stat-card">
+
+                <span>
+                    ADMINISTRATOR ACCOUNTS
+                </span>
+
+
+                <strong>
+                    @administratorAccountCount.ToString("N0")
+                </strong>
+
+
+                <div style="
+                    margin-top:12px;
+                    color:var(--eps-muted);
+                    font-size:12px;
+                    line-height:1.5;
+                    ">
+
+                    Active administrator accounts currently
+                    registered in the surveillance system.
+
+                </div>
+
+
+                <div style="margin-top:14px;">
+
+                    <a asp-page="./Users/Index"
+                       class="btn eps-btn-secondary">
+
+                        <i class="bi bi-people"
+                           aria-hidden="true"></i>
+
+                        Manage Administrators →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 LOOKUPS
+            =================================================== -->
+
+            <div class="record-stat-card">
+
+                <span>
+                    LOOKUP VALUES
+                </span>
+
+
+                <strong>
+                    @Model.LookupValueCount.ToString("N0")
+                </strong>
+
+
+                <div style="
+                    margin-top:12px;
+                    color:var(--eps-muted);
+                    font-size:12px;
+                    line-height:1.5;
+                    ">
+
+                    Controlled values used by the
+                    Questionnaire and AST forms.
+
+                </div>
+
+
+                <div style="margin-top:14px;">
+
+                    <a asp-page="./Lookups/Index"
+                       class="btn eps-btn-secondary">
+
+                        <i class="bi bi-list-check"
+                           aria-hidden="true"></i>
+
+                        Manage Lookup Values →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 FORM VERSIONS
+            =================================================== -->
+
+            <div class="record-stat-card">
+
+                <span>
+                    CURRENT FORM VERSIONS
+                </span>
+
+
+                <strong>
+                    @Model.CurrentFormVersionCount.ToString("N0")
+                </strong>
+
+
+                <div style="
+                    margin-top:12px;
+                    color:var(--eps-muted);
+                    font-size:12px;
+                    line-height:1.5;
+                    ">
+
+                    Active form configurations.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         CONFIGURATION OVERVIEW
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    SYSTEM CONFIGURATION
+                </div>
+
+
+                <h2>
+                    Configuration Status
+                </h2>
+
+
+                <p>
+                    Current configuration structures available to
+                    the surveillance application.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="record-info-grid">
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Lookup Values
+                </span>
+
+
+                <strong>
+                    @Model.LookupValueCount.ToString("N0")
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Active Lookup Values
+                </span>
+
+
+                <strong>
+                    @Model.ActiveLookupValueCount.ToString("N0")
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Form Versions
+                </span>
+
+
+                <strong>
+                    @Model.FormVersionCount.ToString("N0")
+                </strong>
+
+            </div>
+
+
+            <div class="record-info-item">
+
+                <span>
+                    Current Form Versions
+                </span>
+
+
+                <strong>
+                    @Model.CurrentFormVersionCount.ToString("N0")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         LOOKUP GROUPS
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    LOOKUP MANAGEMENT
+                </div>
+
+
+                <h2>
+                    Lookup Groups
+                </h2>
+
+
+                <p>
+                    Lookup values provide controlled choices used
+                    throughout the application.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <a asp-page="./Lookups/Index"
+                   class="btn eps-btn-secondary">
+
+                    <i class="bi bi-list-check"
+                       aria-hidden="true"></i>
+
+                    Open Lookup Management →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.LookupGroups.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-list-check"></i>
+
+                </div>
+
+
+                <h3>
+                    No lookup values configured
+                </h3>
+
+
+                <p>
+                    The lookup_value table currently contains no
+                    configuration entries.
+                </p>
+
+
+                <a asp-page="./Lookups/Create"
+                   class="btn eps-btn-primary">
+
+                    <i class="bi bi-plus-circle"
+                       aria-hidden="true"></i>
+
+                    Create Lookup Value
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="module-table-card">
+
+                <div class="table-responsive">
+
+                    <table class="
+                        table
+                        table-hover
+                        align-middle
+                        mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Lookup Group
+                                </th>
+
+
+                                <th>
+                                    Total Values
+                                </th>
+
+
+                                <th>
+                                    Active Values
+                                </th>
+
+
+                                <th>
+                                    Inactive Values
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (
+                                var group
+                                in Model.LookupGroups)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <div class="record-primary">
+                                            @group.LookupGroup
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @group.TotalValues.ToString("N0")
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            @group.ActiveValues
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @{
+                                            var inactive =
+                                                group.TotalValues -
+                                                group.ActiveValues;
+                                        }
+
+
+                                        @if (inactive > 0)
+                                        {
+                                            <span class="
+                                                identifier-chip
+                                                ast-linkage-unlinked">
+
+                                                @inactive
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                0
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         FORM VERSIONS
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    FORM GOVERNANCE
+                </div>
+
+
+                <h2>
+                    Current Form Versions
+                </h2>
+
+
+                <p>
+                    Active form versions currently registered by
+                    the surveillance system.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.CurrentFormVersions.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No current form versions registered
+                </strong>
+
+
+                <span>
+                    The form_version table contains no current
+                    configuration records.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="module-table-card">
+
+                <div class="table-responsive">
+
+                    <table class="
+                        table
+                        table-hover
+                        align-middle
+                        mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Form
+                                </th>
+
+                                <th>
+                                    Version
+                                </th>
+
+                                <th>
+                                    Effective From
+                                </th>
+
+                                <th>
+                                    Effective To
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Notes
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (
+                                var version
+                                in Model.CurrentFormVersions)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <div class="record-primary">
+                                            @version.FormName
+                                        </div>
+
+
+                                        <div class="record-secondary">
+                                            ID @version.FormVersionId
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="identifier-chip">
+
+                                            @version.VersionNumber
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @(
+                                            version.EffectiveFrom
+                                                .ToLocalTime()
+                                                .ToString("dd MMM yyyy")
+                                        )
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (
+                                            version.EffectiveTo.HasValue)
+                                        {
+                                            @(
+                                                version.EffectiveTo.Value
+                                                    .ToLocalTime()
+                                                    .ToString("dd MMM yyyy")
+                                            )
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                Current
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            <i class="
+                                            bi
+                                            bi-check-circle-fill"
+                                               aria-hidden="true"></i>
+
+                                            Current
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        @Display(version.Notes)
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         RECENT AUDIT
+    ======================================================= -->
+
+    <section class="record-section">
+
+        <div class="record-section-heading">
+
+            <div>
+
+                <div class="record-section-kicker">
+                    DATA GOVERNANCE
+                </div>
+
+
+                <h2>
+                    Recent Data-Entry Audit
+                </h2>
+
+
+                <p>
+                    Most recent recorded changes across governed
+                    records.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.RecentAudits.Count == 0)
+        {
+            <div class="record-notice record-notice-neutral">
+
+                <strong>
+                    No audit entries found
+                </strong>
+
+
+                <span>
+                    No data-entry audit records are currently
+                    available.
+                </span>
+
+            </div>
+        }
+        else
+        {
+            <div class="module-table-card">
+
+                <div class="table-responsive">
+
+                    <table class="
+                        table
+                        table-hover
+                        align-middle
+                        mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Changed
+                                </th>
+
+
+                                <th>
+                                    Record
+                                </th>
+
+
+                                <th>
+                                    Field
+                                </th>
+
+
+                                <th>
+                                    Previous
+                                </th>
+
+
+                                <th>
+                                    New
+                                </th>
+
+
+                                <th>
+                                    Changed By
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (
+                                var audit
+                                in Model.RecentAudits)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        @(
+                                            audit.ChangedAt
+                                                .ToLocalTime()
+                                                .ToString(
+                                                    "dd MMM yyyy HH:mm"
+                                                )
+                                        )
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="record-primary">
+                                            @audit.RecordType
+                                        </div>
+
+
+                                        <div class="record-secondary">
+                                            @audit.RecordKey
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="identifier-chip">
+                                            @Display(audit.FieldName)
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        @Display(audit.OldValue)
+                                    </td>
+
+
+                                    <td>
+                                        @Display(audit.NewValue)
+                                    </td>
+
+
+                                    <td>
+                                        @Display(audit.ChangedBy)
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ======================================================
+         FOOTER
+    ======================================================= -->
+
+    <div class="record-view-footer">
+
+        <div class="record-secondary">
+
+            <i class="bi bi-shield-lock"
+               aria-hidden="true"></i>
+
+            System Administration
+
+        </div>
+
+
+        <div class="record-secondary">
+
+            <i class="bi bi-sliders2"
+               aria-hidden="true"></i>
+
+            Configuration and governance
+
+        </div>
+
+    </div>
+
+</div>

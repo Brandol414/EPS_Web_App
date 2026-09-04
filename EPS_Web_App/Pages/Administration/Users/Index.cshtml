@@ -1,0 +1,396 @@
+﻿@page
+@model EPS_Web_App.Pages.Administration.Users.IndexModel
+
+@{
+    ViewData["Title"] = "Administrator Accounts";
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                SYSTEM ADMINISTRATION
+            </div>
+
+            <h1 class="module-title">
+                Administrator Accounts
+            </h1>
+
+            <p class="module-description">
+                Manage the users who are authorized to perform
+                administrative functions in the surveillance system.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+            <a asp-page="./Create"
+               class="btn eps-btn-primary">
+
+                + Add Administrator
+
+            </a>
+
+
+            <a asp-page="../Index"
+               class="btn eps-btn-secondary">
+
+                ← Administration
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SUMMARY
+    ======================================================= -->
+
+    <div class="dashboard-metrics"
+         style="margin-bottom:24px;">
+
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    ADMINISTRATORS
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    A
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.Users.Count.ToString("N0")
+            </div>
+
+            <div class="dashboard-metric-note">
+                Accounts registered in the system
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    ACTIVE
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    ✓
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.Users.Count(
+                    x => x.IsActive
+                ).ToString("N0")
+            </div>
+
+            <div class="dashboard-metric-note">
+                Accounts currently enabled
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    ADMIN ACCESS
+                </div>
+
+                <div class="dashboard-metric-icon">
+                    #
+                </div>
+
+            </div>
+
+            <div class="dashboard-metric-value">
+                @Model.Users.Count(
+                    x => x.IsAdministrator
+                ).ToString("N0")
+            </div>
+
+            <div class="dashboard-metric-note">
+                Accounts with administrator privileges
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         USER TABLE
+    ======================================================= -->
+
+    <div class="results-header">
+
+        <div>
+
+            <strong>
+                Authorized Users
+            </strong>
+
+            <span>
+                @Model.Users.Count.ToString("N0")
+                accounts
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="module-table-card">
+
+        @if (Model.Users.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon">
+                    A
+                </div>
+
+                <h3>
+                    No administrator accounts found
+                </h3>
+
+                <p>
+                    Create the first administrator account to
+                    begin managing authorized users.
+                </p>
+
+                <a asp-page="./Create"
+                   class="btn eps-btn-primary">
+
+                    + Add Administrator
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                Access
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                            <th>
+                                Last Login
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (
+                            var user
+                            in Model.Users)
+                        {
+                            <tr>
+
+                                <!-- NAME -->
+
+                                <td>
+
+                                    <div class="record-primary">
+                                        @user.DisplayName
+                                    </div>
+
+                                    <div class="record-secondary">
+                                        Admin ID:
+                                        @user.AdminUserId
+                                    </div>
+
+                                </td>
+
+
+                                <!-- USERNAME -->
+
+                                <td>
+
+                                    <span class="identifier-chip">
+                                        @user.Username
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACCESS -->
+
+                                <td>
+
+                                    @if (user.IsAdministrator)
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            Administrator
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="identifier-chip">
+
+                                            Standard User
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-linked">
+
+                                            Active
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            ast-linkage-unlinked">
+
+                                            Inactive
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- CREATED -->
+
+                                <td>
+
+                                    @(
+                                        user.CreatedAt
+                                            .ToLocalTime()
+                                            .ToString(
+                                                "dd MMM yyyy"
+                                            )
+                                    )
+
+                                </td>
+
+
+                                <!-- LAST LOGIN -->
+
+                                <td>
+
+                                    @if (
+                                        user.LastLoginAt.HasValue)
+                                    {
+                                        @(
+                                            user.LastLoginAt.Value
+                                                .ToLocalTime()
+                                                .ToString(
+                                                    "dd MMM yyyy HH:mm"
+                                                )
+                                        )
+                                    }
+                                    else
+                                    {
+                                        <span class="record-secondary">
+                                            Never
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- ======================================================
+         FOOTER
+    ======================================================= -->
+
+    <div class="record-view-footer">
+
+        <div class="record-secondary">
+            Administrator Accounts
+        </div>
+
+        <div class="record-secondary">
+            EPS Surveillance Platform
+        </div>
+
+    </div>
+
+</div>

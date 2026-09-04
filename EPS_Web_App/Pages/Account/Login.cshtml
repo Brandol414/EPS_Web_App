@@ -1,0 +1,187 @@
+﻿@page
+@model EPS_Web_App.Pages.Account.LoginModel
+
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="account-page">
+
+    <div class="account-card">
+
+
+        <!-- ==================================================
+             ACCOUNT BRAND
+        =================================================== -->
+
+        <div class="account-brand">
+
+            <div class="account-brand-mark">
+
+                <img src="~/images/login.png"
+                     alt="Enteric surveillance"
+                     class="account-brand-image" />
+
+            </div>
+
+        </div>
+
+
+        <div class="module-eyebrow">
+            EPS ENTERIC SURVEILLANCE
+        </div>
+
+
+        <h1 class="account-title">
+            Sign In
+        </h1>
+
+
+        <p class="account-description">
+            Sign in to access the surveillance management system.
+        </p>
+
+
+        <!-- ==================================================
+             VALIDATION SUMMARY
+        =================================================== -->
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation-summary">
+        </div>
+
+
+        <form method="post">
+
+
+            <!-- ==================================================
+                 PRESERVE ORIGINAL REQUESTED PAGE
+            =================================================== -->
+
+            <input type="hidden"
+                   asp-for="ReturnUrl" />
+
+
+            <!-- ==================================================
+                 USERNAME
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.Username">
+
+                    Username
+
+                    <span class="required-mark">
+                        *
+                    </span>
+
+                </label>
+
+
+                <input asp-for="Input.Username"
+                       class="form-control"
+                       autocomplete="username"
+                       autofocus
+                       required
+                       aria-required="true" />
+
+
+                <span asp-validation-for="Input.Username"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 PASSWORD
+            =================================================== -->
+
+            <div class="entry-field">
+
+                <label asp-for="Input.Password">
+
+                    Password
+
+                    <span class="required-mark">
+                        *
+                    </span>
+
+                </label>
+
+
+                <input asp-for="Input.Password"
+                       type="password"
+                       class="form-control"
+                       autocomplete="current-password"
+                       required
+                       aria-required="true" />
+
+
+                <span asp-validation-for="Input.Password"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 REMEMBER ME
+            =================================================== -->
+
+            <div class="account-checkbox">
+
+                <input asp-for="Input.RememberMe" />
+
+                <label asp-for="Input.RememberMe">
+
+                    Keep me signed in
+
+                </label>
+
+            </div>
+
+
+            <!-- ==================================================
+                 SIGN IN
+            =================================================== -->
+
+            <button type="submit"
+                    class="btn eps-btn-primary account-submit">
+
+                <i class="bi bi-box-arrow-in-right"
+                   aria-hidden="true"></i>
+
+                <span>
+                    Sign In
+                </span>
+
+            </button>
+
+        </form>
+
+
+        <!-- ==================================================
+             FIRST-TIME ADMINISTRATOR SETUP
+        =================================================== -->
+
+        <div class="account-setup-link">
+
+            <a asp-page="/Account/Setup"
+               class="btn eps-btn-secondary account-setup-button">
+
+                <i class="bi bi-person-plus-fill"
+                   aria-hidden="true"></i>
+
+                <span>
+                    First-Time Administrator Setup
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

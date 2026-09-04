@@ -1,0 +1,1212 @@
+﻿@page
+@model EPS_Web_App.Pages.Reconciliation.IndexModel
+
+@{
+    ViewData["Title"] = "Reconciliation";
+
+    var unlinkedAstIconUrl =
+        Url.Content("~/images/unlinked-ast.png");
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                DATA QUALITY MODULE
+            </div>
+
+
+            <h1 class="module-title">
+                Reconciliation
+            </h1>
+
+
+            <p class="module-description">
+                Review specimen linkage, identify unresolved
+                laboratory discrepancies, and manage data-quality
+                alerts across the surveillance system.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+
+            <a asp-page="./History"
+               class="btn eps-btn-secondary">
+
+                <i class="bi bi-clock-history"
+                   aria-hidden="true"></i>
+
+                Audit History
+
+            </a>
+
+
+            <form method="post"
+                  asp-page-handler="Run"
+                  style="margin:0;">
+
+                <button type="submit"
+                        class="btn eps-btn-primary">
+
+                    <i class="bi bi-arrow-repeat"
+                       aria-hidden="true"></i>
+
+                    Run Reconciliation
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         RUN RESULT
+    ======================================================= -->
+    @if (!string.IsNullOrWhiteSpace(
+            Model.RunMessage))
+    {
+        <div class="
+            record-notice
+            record-notice-neutral">
+
+            <div>
+
+                <strong>
+                    Reconciliation run completed
+                </strong>
+
+
+                <span>
+                    @Model.RunMessage
+                </span>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ======================================================
+         SUMMARY METRICS
+    ======================================================= -->
+
+    <div class="dashboard-metrics"
+         style="margin-bottom:24px;">
+
+
+        <!-- ==================================================
+             OPEN ALERTS
+        =================================================== -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-warning">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    OPEN ALERTS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.OpenAlertCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Reconciliation issues requiring attention
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             HIGH PRIORITY
+        =================================================== -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    HIGH PRIORITY
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-shield-exclamation"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.HighPriorityAlertCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Open High or Critical alerts
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             UNLINKED AST
+        =================================================== -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-warning">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    UNLINKED AST
+                </div>
+
+
+                <div class="
+                    dashboard-metric-icon
+                    eps-unlinked-image-icon"
+                     aria-hidden="true">
+
+                    <img src="@unlinkedAstIconUrl"
+                         alt="" />
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.UnlinkedAstCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Laboratory records not marked Linked
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             MATCHABLE
+        =================================================== -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    MATCHABLE
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-arrow-left-right"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.UnlinkedWithQuestionnaireCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Unlinked AST records with a questionnaire match
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         AST LINKAGE OVERVIEW
+    ======================================================= -->
+
+    <div class="module-search-panel"
+         style="margin-bottom:24px;">
+
+        <div class="reconciliation-overview">
+
+
+            <div>
+
+                <div class="module-eyebrow">
+                    AST LINKAGE OVERVIEW
+                </div>
+
+
+                <div class="reconciliation-overview-text">
+
+                    @Model.LinkedAstCount.ToString("N0")
+                    of
+                    @Model.TotalAstCount.ToString("N0")
+                    AST records are currently marked as Linked.
+
+                </div>
+
+            </div>
+
+
+            <div class="reconciliation-overview-badges">
+
+
+                <!-- LINKED -->
+
+                <span class="identifier-chip">
+
+                    <i class="bi bi-link-45deg"
+                       aria-hidden="true"></i>
+
+                    Linked:
+                    @Model.LinkedAstCount
+
+                </span>
+
+
+                <!-- UNLINKED -->
+
+                <span class="
+                    identifier-chip
+                    ast-linkage-unlinked
+                    eps-unlinked-table-chip">
+
+                    <span class="
+                        eps-unlinked-table-icon"
+                          aria-hidden="true">
+
+                        <img src="@unlinkedAstIconUrl"
+                             alt="" />
+
+                    </span>
+
+                    Unlinked:
+                    @Model.UnlinkedAstCount
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SEARCH / FILTER
+    ======================================================= -->
+
+    <div class="module-search-panel">
+
+        <form method="get">
+
+            <div class="search-row">
+
+
+                <!-- SEARCH -->
+
+                <div class="search-field search-field-wide">
+
+                    <label for="search">
+                        Search
+                    </label>
+
+
+                    <input id="search"
+                           name="search"
+                           value="@Model.Search"
+                           class="form-control"
+                           placeholder="Specimen ID, alert type, description..." />
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="search-field">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+
+                    <select id="status"
+                            name="status"
+                            class="form-select">
+
+                        <option value="">
+                            All statuses
+                        </option>
+
+
+                        <option value="Open"
+                                selected="@(string.Equals(
+                                                                Model.Status,
+                                                                "Open",
+                                                                StringComparison.OrdinalIgnoreCase))">
+
+                            Open
+
+                        </option>
+
+
+                        <option value="Resolved"
+                                selected="@(string.Equals(
+                                                                Model.Status,
+                                                                "Resolved",
+                                                                StringComparison.OrdinalIgnoreCase))">
+
+                            Resolved
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PRIORITY -->
+
+                <div class="search-field">
+
+                    <label for="priority">
+                        Priority
+                    </label>
+
+
+                    <select id="priority"
+                            name="priority"
+                            class="form-select">
+
+                        <option value="">
+                            All priorities
+                        </option>
+
+
+                        @foreach (
+                            var priorityOption
+                            in new[]
+                            {
+                                "Critical",
+                                "High",
+                                "Medium",
+                                "Low"
+                            })
+                        {
+                            <option value="@priorityOption"
+                                    selected="@(string.Equals(
+                                                                        Model.Priority,
+                                                                        priorityOption,
+                                                                        StringComparison.OrdinalIgnoreCase))">
+
+                                @priorityOption
+
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH BUTTONS -->
+
+                <div class="search-actions">
+
+                    <button type="submit"
+                            class="btn eps-btn-primary">
+
+                        <i class="bi bi-search"
+                           aria-hidden="true"></i>
+
+                        Search
+
+                    </button>
+
+
+                    <a asp-page="./Index"
+                       class="btn eps-btn-secondary">
+
+                        <i class="bi bi-arrow-counterclockwise"
+                           aria-hidden="true"></i>
+
+                        Clear
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ======================================================
+         ALERT RESULTS HEADER
+    ======================================================= -->
+
+    <div class="results-header">
+
+        <div>
+
+            <strong>
+                Reconciliation Alerts
+            </strong>
+
+
+            <span>
+                @Model.TotalItems.ToString("N0")
+                matching alerts
+            </span>
+
+        </div>
+
+
+        <div>
+
+            <i class="bi bi-file-earmark-text"
+               aria-hidden="true"></i>
+
+            Page
+            @Model.PageNumber
+            of
+            @(Model.TotalPages == 0
+                ? 1
+                : Model.TotalPages)
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         ALERT TABLE
+    ======================================================= -->
+
+    <div class="module-table-card">
+
+        @if (Model.Alerts.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-shield-check"></i>
+
+                </div>
+
+
+                <h3>
+                    No reconciliation alerts found
+                </h3>
+
+
+                <p>
+                    No alerts match the current search and filter
+                    criteria.
+                </p>
+
+
+                <a asp-page="./Index"
+                   class="btn eps-btn-secondary">
+
+                    <i class="bi bi-arrow-counterclockwise"
+                       aria-hidden="true"></i>
+
+                    Clear Filters
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Specimen
+                            </th>
+
+                            <th>
+                                Alert
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var alert in Model.Alerts)
+                        {
+                            <tr>
+
+
+                                <!-- SPECIMEN -->
+
+                                <td>
+
+                                    <div class="record-primary">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            alert.SpecimenId)
+                                            ? "—"
+                                            : alert.SpecimenId)
+
+                                    </div>
+
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        alert.SourceRecord))
+                                    {
+                                        <div class="record-secondary">
+
+                                            Source:
+                                            @alert.SourceRecord
+
+                                        </div>
+                                    }
+
+                                </td>
+
+
+                                <!-- ALERT -->
+
+                                <td>
+
+                                    <span class="identifier-chip">
+
+                                        <i class="bi bi-clipboard2-pulse"
+                                           aria-hidden="true"></i>
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                alert.AlertType)
+                                                ? "—"
+                                                : alert.AlertType
+                                        )
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- PRIORITY -->
+
+                                <td>
+
+                                    @if (
+                                        string.Equals(
+                                            alert.Priority,
+                                            "Critical",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-priority-critical">
+
+                                            <i class="
+                                            bi
+                                            bi-exclamation-octagon-fill"
+                                               aria-hidden="true"></i>
+
+                                            Critical
+
+                                        </span>
+                                    }
+                                    else if (
+                                        string.Equals(
+                                            alert.Priority,
+                                            "High",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-priority-high">
+
+                                            <i class="
+                                            bi
+                                            bi-shield-exclamation"
+                                               aria-hidden="true"></i>
+
+                                            High
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="identifier-chip">
+
+                                            @alert.Priority
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @if (
+                                        string.Equals(
+                                            alert.Status,
+                                            "Open",
+                                            StringComparison.OrdinalIgnoreCase)
+                                    )
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-status-open">
+
+                                            <i class="bi bi-circle-fill"
+                                               aria-hidden="true"></i>
+
+                                            Open
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            alert-status-closed">
+
+                                            <i class="
+                                            bi
+                                            bi-check-circle-fill"
+                                               aria-hidden="true"></i>
+
+                                            @alert.Status
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <td>
+
+                                    <div class="reconciliation-description">
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                alert.Description)
+                                                ? "—"
+                                                : alert.Description
+                                        )
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ==================================================
+                                     CREATED — CORRECT RAZOR EXPRESSION
+                                =================================================== -->
+
+                                <td>
+
+                                    <span class="record-date">
+
+                                        @(alert.CreatedAt
+                                            .ToLocalTime()
+                                            .ToString(
+                                                "dd MMM yyyy HH:mm"
+                                            ))
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td class="text-end">
+
+                                    <a asp-page="./View"
+                                       asp-route-id="@alert.AlertId"
+                                       class="
+                                        btn
+                                        btn-sm
+                                        eps-btn-view">
+
+                                        <i class="bi bi-search"
+                                           aria-hidden="true"></i>
+
+                                        Review
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+
+        <!-- ==================================================
+             PAGINATION
+        ======================================================= -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="module-pagination">
+
+                <div class="pagination-info">
+
+                    <i class="bi bi-list-ol"
+                       aria-hidden="true"></i>
+
+                    Page
+                    @Model.PageNumber
+                    of
+                    @Model.TotalPages
+
+                </div>
+
+
+                <div class="pagination-actions">
+
+                    @if (Model.PageNumber > 1)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-status="@Model.Status"
+                           asp-route-priority="@Model.Priority"
+                           asp-route-pageNumber="@(Model.PageNumber - 1)"
+                           class="btn eps-btn-secondary">
+
+                            <i class="bi bi-chevron-left"
+                               aria-hidden="true"></i>
+
+                            Previous
+
+                        </a>
+                    }
+
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-status="@Model.Status"
+                           asp-route-priority="@Model.Priority"
+                           asp-route-pageNumber="@(Model.PageNumber + 1)"
+                           class="btn eps-btn-primary">
+
+                            Next
+
+                            <i class="bi bi-chevron-right"
+                               aria-hidden="true"></i>
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- ======================================================
+         UNLINKED AST CANDIDATES
+    ======================================================= -->
+
+    <div class="results-header"
+         style="margin-top:30px;">
+
+        <div>
+
+            <strong>
+                Unlinked AST Candidates
+            </strong>
+
+
+            <span>
+                Latest records requiring review
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="module-table-card">
+
+        @if (Model.UnlinkedAstRecords.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-check2-circle"></i>
+
+                </div>
+
+
+                <h3>
+                    No unlinked AST records
+                </h3>
+
+
+                <p>
+                    All AST records are currently marked as Linked.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Specimen ID
+                            </th>
+
+                            <th>
+                                LAN
+                            </th>
+
+                            <th>
+                                Site
+                            </th>
+
+                            <th>
+                                Organism
+                            </th>
+
+                            <th>
+                                Questionnaire Match
+                            </th>
+
+                            <th>
+                                Linkage
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (
+                            var ast
+                            in Model.UnlinkedAstRecords)
+                        {
+                            <tr>
+
+
+                                <!-- SPECIMEN -->
+
+                                <td>
+
+                                    <div class="record-primary">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            ast.SpecimenId)
+                                            ? "—"
+                                            : ast.SpecimenId)
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- LAN -->
+
+                                <td>
+
+                                    @(
+                                        string.IsNullOrWhiteSpace(
+                                            ast.Lan)
+                                            ? "—"
+                                            : ast.Lan
+                                    )
+
+                                </td>
+
+
+                                <!-- SITE -->
+
+                                <td>
+
+                                    <span class="site-chip">
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                ast.SiteCode)
+                                                ? "—"
+                                                : ast.SiteCode
+                                        )
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ORGANISM -->
+
+                                <td>
+
+                                    <div class="pathogen-list">
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            ast.BacterialIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-bacterial">
+
+                                                @ast.BacterialIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            ast.ViralIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-viral">
+
+                                                @ast.ViralIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            ast.ParasiteIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-parasite">
+
+                                                @ast.ParasiteIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            string.IsNullOrWhiteSpace(
+                                                ast.BacterialIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                ast.ViralIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                ast.ParasiteIdentification)
+                                        )
+                                        {
+                                            <span class="record-secondary">
+                                                No organism recorded
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- QUESTIONNAIRE MATCH -->
+
+                                <td>
+
+                                    @if (
+                                        ast.HasQuestionnaireMatch)
+                                    {
+                                        <span class="
+                                            identifier-chip
+                                            reconciliation-match">
+
+                                            <i class="bi bi-link-45deg"
+                                               aria-hidden="true"></i>
+
+                                            Match found
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="identifier-chip">
+
+                                            <i class="bi bi-search"
+                                               aria-hidden="true"></i>
+
+                                            No match
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ==================================================
+                                     UNLINKED AST
+                                =================================================== -->
+
+                                <td>
+
+                                    <span class="
+                                        identifier-chip
+                                        ast-linkage-unlinked
+                                        eps-unlinked-table-chip">
+
+                                        <span class="
+                                            eps-unlinked-table-icon"
+                                              aria-hidden="true">
+
+                                            <img src="@unlinkedAstIconUrl"
+                                                 alt="" />
+
+                                        </span>
+
+
+                                        @(
+                                            string.IsNullOrWhiteSpace(
+                                                ast.LinkageStatus)
+                                                ? "Unlinked"
+                                                : ast.LinkageStatus
+                                        )
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td class="text-end">
+
+                                    <a asp-page="./View"
+                                       asp-route-astId="@ast.AstRecordId"
+                                       class="
+                                        btn
+                                        btn-sm
+                                        eps-btn-view">
+
+                                        <i class="bi bi-search"
+                                           aria-hidden="true"></i>
+
+                                        Review
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+</div>

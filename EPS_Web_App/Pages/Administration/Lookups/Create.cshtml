@@ -1,0 +1,233 @@
+﻿@page
+@model EPS_Web_App.Pages.Administration.Lookups.CreateModel
+
+@{
+    ViewData["Title"] = "Create Lookup Value";
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="record-view-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                SYSTEM CONFIGURATION
+            </div>
+
+            <h1 class="record-view-title">
+                Create Lookup Value
+            </h1>
+
+            <div class="record-view-meta">
+
+                Add a new controlled configuration value.
+
+            </div>
+
+        </div>
+
+
+        <div class="record-view-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                ← Back to Lookup Management
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         VALIDATION SUMMARY
+    ======================================================= -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="validation-summary">
+    </div>
+
+
+    <!-- ======================================================
+         FORM
+    ======================================================= -->
+
+    <form method="post">
+
+
+        <section class="record-section">
+
+            <div class="record-section-heading">
+
+                <div>
+
+                    <div class="record-section-kicker">
+                        LOOKUP DEFINITION
+                    </div>
+
+                    <h2>
+                        Value Details
+                    </h2>
+
+                    <p>
+                        Define the group, code, label, and ordering
+                        for this lookup value.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="entry-grid entry-grid-2">
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.LookupGroup">
+                        Lookup Group
+                    </label>
+
+                    <input asp-for="Input.LookupGroup"
+                           class="form-control"
+                           placeholder="e.g. Gender" />
+
+                    <div class="field-help">
+                        Use the existing logical group name when
+                        adding another value to an established group.
+                    </div>
+
+                    <span asp-validation-for="Input.LookupGroup"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.LookupCode">
+                        Lookup Code
+                    </label>
+
+                    <input asp-for="Input.LookupCode"
+                           class="form-control"
+                           placeholder="e.g. M" />
+
+                    <div class="field-help">
+                        Code must be unique within the lookup group.
+                    </div>
+
+                    <span asp-validation-for="Input.LookupCode"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.LookupLabel">
+                        Lookup Label
+                    </label>
+
+                    <input asp-for="Input.LookupLabel"
+                           class="form-control"
+                           placeholder="e.g. Male" />
+
+                    <span asp-validation-for="Input.LookupLabel"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label asp-for="Input.DisplayOrder">
+                        Display Order
+                    </label>
+
+                    <input asp-for="Input.DisplayOrder"
+                           class="form-control"
+                           type="number"
+                           min="0"
+                           placeholder="Optional" />
+
+                    <div class="field-help">
+                        Lower numbers appear first within a group.
+                    </div>
+
+                    <span asp-validation-for="Input.DisplayOrder"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+
+                <div class="entry-field">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <div class="lookup-status-toggle">
+
+                        <input asp-for="Input.IsActive"
+                               type="checkbox"
+                               id="isActive" />
+
+                        <label for="isActive">
+                            Active and available for use
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACTIONS
+        =================================================== -->
+
+        <div class="create-form-actions">
+
+            <a asp-page="./Index"
+               class="btn eps-btn-secondary">
+
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="btn eps-btn-primary">
+
+                Create Lookup Value
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

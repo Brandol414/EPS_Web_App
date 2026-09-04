@@ -1,0 +1,661 @@
+﻿@page
+@model EPS_Web_App.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var unlinkedAstIconUrl =
+        Url.Content("~/images/unlinked-ast.png");
+}
+
+<div class="dashboard-page">
+
+
+    <!-- ======================================================
+         DASHBOARD HEADER
+    ======================================================= -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <div class="dashboard-eyebrow">
+                EPS ENTERIC SURVEILLANCE
+            </div>
+
+
+            <h1 class="dashboard-title">
+                Surveillance Dashboard
+            </h1>
+
+
+            <p class="dashboard-description">
+                Overview of questionnaire records, laboratory linkage,
+                and data-quality alerts across the surveillance system.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <div class="dashboard-live-pill">
+
+                <span class="eps-status-dot"></span>
+
+                <i class="bi bi-database-check"
+                   aria-hidden="true"></i>
+
+                SQL Connected
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         CORE METRICS
+    ======================================================= -->
+
+    <div class="dashboard-metrics">
+
+
+        <!-- QUESTIONNAIRES -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    QUESTIONNAIRE RECORDS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-file-earmark-medical-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.QuestionnaireCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Total surveillance questionnaire records
+            </div>
+
+        </div>
+
+
+        <!-- AST -->
+
+        <div class="dashboard-metric-card">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    AST RECORDS
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.AstCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                Antimicrobial susceptibility records
+            </div>
+
+        </div>
+
+
+        <!-- LINKED AST -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-positive">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    LINKED AST
+                </div>
+
+
+                <div class="dashboard-metric-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.LinkedAstCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                AST records successfully linked to questionnaire specimens
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             UNLINKED AST
+        =================================================== -->
+
+        <div class="
+            dashboard-metric-card
+            dashboard-metric-warning">
+
+            <div class="dashboard-metric-top">
+
+                <div class="dashboard-metric-label">
+                    UNLINKED AST
+                </div>
+
+
+                <div class="
+                    dashboard-metric-icon
+                    eps-unlinked-image-icon"
+                     aria-hidden="true">
+
+                    <img src="@unlinkedAstIconUrl"
+                         alt="" />
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-metric-value">
+                @Model.UnlinkedAstCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-metric-note">
+                AST records requiring linkage review
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         ALERT SUMMARY
+    ======================================================= -->
+
+    <div class="dashboard-alert-summary">
+
+
+        <div class="dashboard-alert-card">
+
+            <div class="dashboard-alert-card-label">
+                OPEN RECONCILIATION ALERTS
+            </div>
+
+
+            <div class="dashboard-alert-card-value">
+                @Model.OpenAlertCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-alert-card-note">
+                Alerts currently requiring review
+            </div>
+
+        </div>
+
+
+        <div class="
+            dashboard-alert-card
+            dashboard-alert-danger">
+
+            <div class="dashboard-alert-card-label">
+                HIGH / CRITICAL ALERTS
+            </div>
+
+
+            <div class="dashboard-alert-card-value">
+                @Model.HighPriorityAlertCount.ToString("N0")
+            </div>
+
+
+            <div class="dashboard-alert-card-note">
+                Open alerts requiring priority attention
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LOWER DASHBOARD GRID
+    ======================================================= -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- ==================================================
+             RECENT ALERTS
+        =================================================== -->
+
+        <section class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <div class="dashboard-panel-kicker">
+                        DATA QUALITY
+                    </div>
+
+
+                    <h3>
+                        Recent Reconciliation Alerts
+                    </h3>
+
+                </div>
+
+
+                <a href="/Reconciliation"
+                   class="dashboard-panel-link">
+
+                    View all
+
+                    <i class="bi bi-arrow-right"
+                       aria-hidden="true"></i>
+
+                </a>
+
+            </div>
+
+
+            @if (Model.RecentAlerts.Count == 0)
+            {
+                <div class="dashboard-empty-state">
+
+                    <div class="dashboard-empty-icon"
+                         aria-hidden="true">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            No reconciliation alerts
+                        </strong>
+
+
+                        <p>
+                            There are currently no reconciliation alerts
+                            recorded in the system.
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                foreach (var alert in Model.RecentAlerts)
+                {
+                    var priorityClass =
+                        string.Equals(
+                            alert.Priority,
+                            "Critical",
+                            StringComparison.OrdinalIgnoreCase)
+                            ? "alert-critical"
+                            : string.Equals(
+                                alert.Priority,
+                                "High",
+                                StringComparison.OrdinalIgnoreCase)
+                                ? "alert-high"
+                                : string.Equals(
+                                    alert.Priority,
+                                    "Medium",
+                                    StringComparison.OrdinalIgnoreCase)
+                                    ? "alert-medium"
+                                    : string.Equals(
+                                        alert.Priority,
+                                        "Low",
+                                        StringComparison.OrdinalIgnoreCase)
+                                        ? "alert-low"
+                                        : "alert-info";
+
+
+                    <div class="dashboard-alert-row">
+
+                        <span class="
+                            dashboard-alert-marker
+                            @priorityClass">
+                        </span>
+
+
+                        <div class="dashboard-alert-content">
+
+                            <div class="dashboard-alert-row-top">
+
+                                <strong>
+                                    @alert.AlertType
+                                </strong>
+
+
+                                <span class="dashboard-alert-priority">
+                                    @alert.Priority
+                                </span>
+
+                            </div>
+
+
+                            <div class="dashboard-alert-specimen">
+
+                                <i class="bi bi-fingerprint"
+                                   aria-hidden="true"></i>
+
+                                Specimen:
+                                @(string.IsNullOrWhiteSpace(
+                                    alert.SpecimenId)
+                                    ? "—"
+                                    : alert.SpecimenId)
+
+                            </div>
+
+
+                            <div class="dashboard-alert-description">
+
+                                @(string.IsNullOrWhiteSpace(
+                                    alert.Description)
+                                    ? "No description provided."
+                                    : alert.Description)
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="dashboard-alert-date">
+
+                            @alert.CreatedAt.ToString(
+                                "dd MMM yyyy HH:mm")
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </section>
+
+
+        <!-- ==================================================
+             SYSTEM OVERVIEW
+        =================================================== -->
+
+        <section class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <div class="dashboard-panel-kicker">
+                        SURVEILLANCE STATUS
+                    </div>
+
+
+                    <h3>
+                        System Overview
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-system-list">
+
+
+                <!-- QUESTIONNAIRE -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="dashboard-system-icon"
+                         aria-hidden="true">
+
+                        <i class="bi bi-file-earmark-medical-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Questionnaire Records
+                        </strong>
+
+
+                        <span>
+                            Total surveillance records captured
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.QuestionnaireCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+
+                <!-- AST -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="dashboard-system-icon"
+                         aria-hidden="true">
+
+                        <i class="bi bi-clipboard2-pulse-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            AST Records
+                        </strong>
+
+
+                        <span>
+                            Laboratory susceptibility records
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.AstCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+
+                <!-- LINKED AST -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="
+                        dashboard-system-icon
+                        dashboard-system-icon-success"
+                         aria-hidden="true">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Linked AST
+                        </strong>
+
+
+                        <span>
+                            AST records linked to questionnaires
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.LinkedAstCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+
+                <!-- ==================================================
+                     UNLINKED AST
+                =================================================== -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="
+                        dashboard-system-icon
+                        dashboard-system-icon-warning
+                        eps-unlinked-system-icon"
+                         aria-hidden="true">
+
+                        <img src="@unlinkedAstIconUrl"
+                             alt="" />
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Unlinked AST
+                        </strong>
+
+
+                        <span>
+                            Laboratory records awaiting linkage
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.UnlinkedAstCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+
+                <!-- OPEN ALERTS -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="
+                        dashboard-system-icon
+                        dashboard-system-icon-warning"
+                         aria-hidden="true">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Open Alerts
+                        </strong>
+
+
+                        <span>
+                            Reconciliation issues requiring review
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.OpenAlertCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+
+                <!-- HIGH / CRITICAL -->
+
+                <div class="dashboard-system-item">
+
+                    <div class="
+                        dashboard-system-icon
+                        dashboard-system-icon-danger"
+                         aria-hidden="true">
+
+                        <i class="bi bi-shield-exclamation"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            High / Critical Alerts
+                        </strong>
+
+
+                        <span>
+                            Priority data-quality issues
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        @Model.HighPriorityAlertCount.ToString("N0")
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>

@@ -1,0 +1,582 @@
+﻿@page
+@model EPS_Web_App.Pages.Questionnaire.IndexModel
+
+@{
+    ViewData["Title"] = "Questionnaire";
+}
+
+<div class="questionnaire-page">
+
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="module-header">
+
+        <div>
+
+            <div class="module-eyebrow">
+                QUESTIONNAIRE MODULE
+            </div>
+
+
+            <h1 class="module-title">
+                Surveillance Records
+            </h1>
+
+
+            <p class="module-description">
+                Search, review, and manage questionnaire records
+                captured within the EPS Enteric Surveillance system.
+            </p>
+
+        </div>
+
+
+        <div class="module-header-actions">
+
+
+            <a asp-page="./Create"
+               class="btn eps-btn-primary">
+
+                <i class="bi bi-plus-circle-fill"
+                   aria-hidden="true"></i>
+
+                <span>
+                    New Questionnaire
+                </span>
+
+            </a>
+
+
+            <div class="module-record-count">
+
+                <span>
+                    Records
+                </span>
+
+
+                <strong>
+                    @Model.TotalRecords.ToString("N0")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SEARCH
+    ======================================================= -->
+
+    <div class="module-search-panel">
+
+        <form method="get">
+
+            <div class="search-row">
+
+
+                <div class="search-field search-field-wide">
+
+                    <label for="Search">
+                        Search
+                    </label>
+
+
+                    <input id="Search"
+                           name="Search"
+                           value="@Model.Search"
+                           class="form-control"
+                           placeholder="Specimen ID, LAN, site, or pathogen..." />
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="SiteCode">
+                        Site
+                    </label>
+
+
+                    <select id="SiteCode"
+                            name="SiteCode"
+                            class="form-select">
+
+                        <option value="">
+                            All sites
+                        </option>
+
+
+                        @foreach (var site in Model.AvailableSites)
+                        {
+                            if (Model.SiteCode == site)
+                            {
+                                <option value="@site"
+                                        selected>
+                                    @site
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@site">
+                                    @site
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="Lan">
+                        LAN
+                    </label>
+
+
+                    <input id="Lan"
+                           name="Lan"
+                           value="@Model.Lan"
+                           class="form-control"
+                           placeholder="MHK#####" />
+
+                </div>
+
+
+                <div class="search-field">
+
+                    <label for="Pathogen">
+                        Pathogen
+                    </label>
+
+
+                    <input id="Pathogen"
+                           name="Pathogen"
+                           value="@Model.Pathogen"
+                           class="form-control"
+                           placeholder="e.g. EPEC" />
+
+                </div>
+
+
+                <div class="search-actions">
+
+                    <button type="submit"
+                            class="btn eps-btn-primary">
+
+                        <i class="bi bi-search"
+                           aria-hidden="true"></i>
+
+                        Search
+
+                    </button>
+
+
+                    <a asp-page="./Index"
+                       class="btn eps-btn-secondary">
+
+                        <i class="bi bi-arrow-counterclockwise"
+                           aria-hidden="true"></i>
+
+                        Clear
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ======================================================
+         RESULTS HEADER
+    ======================================================= -->
+
+    <div class="results-header">
+
+        <div>
+
+            <strong>
+                Questionnaire Records
+            </strong>
+
+
+            <span>
+
+                Showing
+
+                @(Model.TotalRecords == 0
+                    ? 0
+                    : ((Model.PageNumber - 1) *
+                       IndexModel.PageSize) + 1)
+
+                –
+
+                @(Math.Min(
+                    Model.PageNumber *
+                    IndexModel.PageSize,
+                    Model.TotalRecords
+                ))
+
+                of
+
+                @Model.TotalRecords.ToString("N0")
+
+            </span>
+
+        </div>
+
+
+        <div>
+
+            <i class="bi bi-journal-text"
+               aria-hidden="true"></i>
+
+            Page
+            @Model.PageNumber
+            of
+            @(Model.TotalPages == 0
+                ? 1
+                : Model.TotalPages)
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         TABLE
+    ======================================================= -->
+
+    <div class="module-table-card">
+
+        @if (Model.Records.Count == 0)
+        {
+            <div class="module-empty-state">
+
+                <div class="module-empty-icon"
+                     aria-hidden="true">
+
+                    <i class="bi bi-file-earmark-x"></i>
+
+                </div>
+
+
+                <h3>
+                    No questionnaire records found
+                </h3>
+
+
+                <p>
+                    Try changing your search or filter criteria.
+                </p>
+
+
+                <a asp-page="./Index"
+                   class="btn eps-btn-secondary">
+
+                    <i class="bi bi-arrow-counterclockwise"
+                       aria-hidden="true"></i>
+
+                    Clear Search
+
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="
+                    table
+                    table-hover
+                    align-middle
+                    mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Specimen ID
+                            </th>
+
+                            <th>
+                                LAN
+                            </th>
+
+                            <th>
+                                Site
+                            </th>
+
+                            <th>
+                                Isolation
+                            </th>
+
+                            <th>
+                                Age
+                            </th>
+
+                            <th>
+                                Gender
+                            </th>
+
+                            <th>
+                                Pathogen Identification
+                            </th>
+
+                            <th class="text-end">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var record in Model.Records)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <div class="record-primary">
+                                        @record.SpecimenId
+                                    </div>
+
+
+                                    <div class="record-secondary">
+
+                                        ID @record.QuestionnaireId
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="identifier-chip">
+
+                                        @(string.IsNullOrWhiteSpace(record.Lan)
+                                            ? "—"
+                                            : record.Lan)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="site-chip">
+
+                                        @(string.IsNullOrWhiteSpace(record.SiteCode)
+                                            ? "—"
+                                            : record.SiteCode)
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    @(string.IsNullOrWhiteSpace(record.IsolationDate)
+                                        ? "—"
+                                        : record.IsolationDate)
+
+                                </td>
+
+
+                                <td>
+
+                                    @(string.IsNullOrWhiteSpace(record.Age)
+                                        ? "—"
+                                        : record.Age)
+
+                                </td>
+
+
+                                <td>
+
+                                    @(string.IsNullOrWhiteSpace(record.Gender)
+                                        ? "—"
+                                        : record.Gender)
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="pathogen-list">
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.BacterialIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-bacterial">
+
+                                                @record.BacterialIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.ViralIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-viral">
+
+                                                @record.ViralIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                            record.ParasiteIdentification))
+                                        {
+                                            <span class="
+                                                pathogen-pill
+                                                pathogen-parasite">
+
+                                                @record.ParasiteIdentification
+
+                                            </span>
+                                        }
+
+
+                                        @if (
+                                            string.IsNullOrWhiteSpace(
+                                                record.BacterialIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                record.ViralIdentification)
+                                            &&
+                                            string.IsNullOrWhiteSpace(
+                                                record.ParasiteIdentification)
+                                        )
+                                        {
+                                            <span class="record-secondary">
+
+                                                <i class="bi bi-dash-circle"
+                                                   aria-hidden="true"></i>
+
+                                                No pathogen recorded
+
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <td class="text-end">
+
+                                    <a href="/Questionnaire/View/@record.QuestionnaireId"
+                                       class="btn btn-sm eps-btn-view">
+
+                                        <i class="bi bi-eye"
+                                           aria-hidden="true"></i>
+
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+
+        <!-- ==================================================
+             PAGINATION
+        =================================================== -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="module-pagination">
+
+                <div class="pagination-info">
+
+                    <i class="bi bi-journal-text"
+                       aria-hidden="true"></i>
+
+                    Page
+                    @Model.PageNumber
+                    of
+                    @Model.TotalPages
+
+                </div>
+
+
+                <div class="pagination-actions">
+
+                    @if (Model.PageNumber > 1)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SiteCode="@Model.SiteCode"
+                           asp-route-Lan="@Model.Lan"
+                           asp-route-Pathogen="@Model.Pathogen"
+                           asp-route-PageNumber="@(Model.PageNumber - 1)"
+                           class="btn eps-btn-secondary">
+
+                            <i class="bi bi-chevron-left"
+                               aria-hidden="true"></i>
+
+                            Previous
+
+                        </a>
+                    }
+
+
+                    @if (Model.PageNumber < Model.TotalPages)
+                    {
+                        <a asp-page="./Index"
+                           asp-route-Search="@Model.Search"
+                           asp-route-SiteCode="@Model.SiteCode"
+                           asp-route-Lan="@Model.Lan"
+                           asp-route-Pathogen="@Model.Pathogen"
+                           asp-route-PageNumber="@(Model.PageNumber + 1)"
+                           class="btn eps-btn-primary">
+
+                            Next
+
+                            <i class="bi bi-chevron-right"
+                               aria-hidden="true"></i>
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
